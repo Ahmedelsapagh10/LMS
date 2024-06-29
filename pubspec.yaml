@@ -81,6 +81,7 @@ dependencies:
   flutter_windowmanager: ^0.2.0
   video_player: ^2.9.0
   chewie: ^1.8.1
+  flick_video_player: ^0.8.0
 #  package_info_plus_windows:
 #    path: package_info_plus_windows-2.1.0
 #  package_info_plus: ^1.4.3+1
