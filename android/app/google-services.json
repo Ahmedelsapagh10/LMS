@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "414877220431",
+    "project_id": "mhpcourses",
+    "storage_bucket": "mhpcourses.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414877220431:android:0f271fc3a5b7b328e0b43a",
+        "android_client_info": {
+          "package_name": "com.ssc.course"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9ptPdwD_-wIlHxEgJKu9nHtXU2xT23dM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
