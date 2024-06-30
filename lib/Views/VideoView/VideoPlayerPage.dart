@@ -30,6 +30,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   String? video;
   bool _isPlayerReady = false;
   late YoutubePlayerController _controller;
+  late VideoPlayerController videoPlayerController;
 
   late TextEditingController _idController;
   late TextEditingController _seekToController;
@@ -67,12 +68,20 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     else
     {
       super.initState();
-      flickManager = FlickManager(videoPlayerController:
-      VideoPlayerController.networkUrl(
+      videoPlayerController =  VideoPlayerController.networkUrl(
           Uri.parse('${widget.videoID}'))..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
-      }));
+      });
+
+      flickManager = FlickManager(videoPlayerController: videoPlayerController,
+                      onVideoEnd: () async {
+                        if (widget.lesson != null) {
+                              await lessonController
+                              .updateLessonProgress(
+                              widget.lesson?.id, widget.lesson?.courseId, 1)
+                              .then((value) {
+                            Get.back();});}});
 
     }
   }
@@ -182,7 +191,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   }
   else
     {
-      return Scaffold(
+       return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.blue,
           title: Text('${widget.lesson?.name}'),
