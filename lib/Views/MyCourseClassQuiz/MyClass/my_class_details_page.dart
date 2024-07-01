@@ -23,7 +23,6 @@ import 'package:lms_flutter_app/Model/Class/BbbMeeting.dart';
 import 'package:lms_flutter_app/Model/Class/JitsiMeeting.dart';
 import 'package:lms_flutter_app/Model/Class/ZoomMeeting.dart';
 import 'package:lms_flutter_app/Service/RemoteService.dart';
-import 'package:lms_flutter_app/Views/MyCourseClassQuiz/MyClass/LiveClassProviders/JitsiMeetClass.dart';
 import 'package:lms_flutter_app/utils/CustomAlertBox.dart';
 import 'package:lms_flutter_app/utils/CustomDate.dart';
 import 'package:lms_flutter_app/utils/CustomText.dart';
@@ -312,14 +311,14 @@ class MyClassDetailsPage extends StatelessWidget {
                         return GestureDetector(
                           onTap: () {
                             if (showLiveBtn) {
-                              Get.to(() => JitsiMeetClass(
-                                    meetingId: jitsiMeeting.meetingId,
-                                    meetingSubject: jitsiMeeting.topic,
-                                    userEmail:
-                                        dashboardController.profileData.email,
-                                    userName:
-                                        dashboardController.profileData.name,
-                                  ));
+                              // Get.to(() => JitsiMeetClass(
+                              //       meetingId: jitsiMeeting.meetingId,
+                              //       meetingSubject: jitsiMeeting.topic,
+                              //       userEmail:
+                              //           dashboardController.profileData.email,
+                              //       userName:
+                              //           dashboardController.profileData.name,
+                              //     ));
                             }
                           },
                           child: Container(
