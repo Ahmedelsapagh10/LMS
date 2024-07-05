@@ -26,7 +26,6 @@ dependencies:
   font_awesome_flutter: ^10.5.0
   flutter_widget_from_html_core: ^0.15.1
   firebase_core_platform_interface: ^5.1.0
-  persistent_bottom_nav_bar: ^5.0.2
   loading_skeleton_niu: ^0.0.1
   http_auth: ^1.0.3
   firebase_core: ^3.1.0
@@ -85,6 +84,9 @@ dependencies:
 #    path: package_info_plus_windows-2.1.0
 #  package_info_plus: ^1.4.3+1
 #win32: ^5.0.6
+  persistent_bottom_nav_bar:
+      git:
+        url: https://github.com/HamzaSamirAmmar/PersistentBottomNavBar.git
 
 dependency_overrides:
   http: ^0.13.1
