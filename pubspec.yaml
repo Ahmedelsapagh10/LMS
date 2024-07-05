@@ -29,6 +29,11 @@ dependencies:
   persistent_bottom_nav_bar:
     git:
       url: https://github.com/HamzaSamirAmmar/PersistentBottomNavBar.git
+
+  showcaseview:
+    git:
+      url: https://github.com/chandrabezzo/flutter_showcaseview
+      ref: ae8d8a327cdede529d264d1df02892fdc6161688
   loading_skeleton_niu: ^0.0.1
   http_auth: ^1.0.3
   firebase_core: ^3.1.0
