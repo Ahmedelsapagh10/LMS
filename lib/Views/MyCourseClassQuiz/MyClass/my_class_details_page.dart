@@ -20,7 +20,6 @@ import 'package:lms_flutter_app/Controller/class_controller.dart';
 import 'package:lms_flutter_app/Controller/class_details_tab_controller.dart';
 import 'package:lms_flutter_app/Controller/dashboard_controller.dart';
 import 'package:lms_flutter_app/Model/Class/BbbMeeting.dart';
-import 'package:lms_flutter_app/Model/Class/JitsiMeeting.dart';
 import 'package:lms_flutter_app/Model/Class/ZoomMeeting.dart';
 import 'package:lms_flutter_app/Service/RemoteService.dart';
 import 'package:lms_flutter_app/utils/CustomAlertBox.dart';
@@ -279,116 +278,7 @@ class MyClassDetailsPage extends StatelessWidget {
                       ),
                     );
                   })
-              : controller.classDetails.value.dataClass?.host == 'Jitsi'
-                  ? ListView.builder(
-                      itemCount: controller
-                          .classDetails.value.dataClass?.jitsiMeetings?.length,
-                      itemBuilder: (context, jitsiIndex) {
-                        JitsiMeeting jitsiMeeting = controller.classDetails
-                            .value.dataClass?.jitsiMeetings?[jitsiIndex] ?? JitsiMeeting();
 
-                        bool showPlayBtn = false;
-                        bool showLiveBtn = false;
-                        DateTime startDate =
-                            DateTime.fromMillisecondsSinceEpoch(
-                                int.parse(jitsiMeeting.datetime ?? '') * 1000);
-                        DateTime endDate = DateTime.fromMillisecondsSinceEpoch(
-                            (int.parse(jitsiMeeting.datetime ?? '') +
-                                    ((jitsiMeeting.duration ?? 0) * 60)) *
-                                1000);
-                        int now = DateTime.now().millisecondsSinceEpoch;
-                        if (now > startDate.millisecondsSinceEpoch &&
-                            now < endDate.millisecondsSinceEpoch) {
-                          showPlayBtn = true;
-                          showLiveBtn = true;
-                        } else if (now > endDate.millisecondsSinceEpoch) {
-                          showPlayBtn = false;
-                          showLiveBtn = false;
-                        } else if (now < startDate.millisecondsSinceEpoch) {
-                          showPlayBtn = true;
-                          showLiveBtn = false;
-                        }
-                        return GestureDetector(
-                          onTap: () {
-                            if (showLiveBtn) {
-                              // Get.to(() => JitsiMeetClass(
-                              //       meetingId: jitsiMeeting.meetingId,
-                              //       meetingSubject: jitsiMeeting.topic,
-                              //       userEmail:
-                              //           dashboardController.profileData.email,
-                              //       userName:
-                              //           dashboardController.profileData.name,
-                              //     ));
-                            }
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: showPlayBtn
-                                    ? showLiveBtn
-                                        ? Colors.green.withOpacity(0.2)
-                                        : Colors.blue.withOpacity(0.2)
-                                    : Colors.red.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(5)),
-                            padding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    cartTotal("${stctrl.lang["Start Date"]}"),
-                                    courseStructure(
-                                      CustomDate().formattedDate(startDate),
-                                    ),
-                                  ],
-                                ),
-                                Expanded(
-                                  child: Container(),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    cartTotal(
-                                        "${stctrl.lang["Time (Start-End)"]}"),
-                                    courseStructure(
-                                      '${CustomDate().formattedHourOnly(startDate)} - ${CustomDate().formattedHourOnly(endDate)}',
-                                    ),
-                                  ],
-                                ),
-                                Expanded(
-                                  child: Container(),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    cartTotal("${stctrl.lang["Duration"]}"),
-                                    courseStructure(
-                                      CustomDate().durationToString(controller
-                                              .classDetails
-                                              .value
-                                              .dataClass
-                                              ?.jitsiMeetings?[jitsiIndex]
-                                              .duration ?? 0) +
-                                          ' Hr(s)',
-                                    ),
-                                  ],
-                                ),
-                                Expanded(child: Container()),
-                                showPlayBtn
-                                    ? showLiveBtn
-                                        ? Icon(FontAwesomeIcons.solidPlayCircle)
-                                        : Icon(
-                                            FontAwesomeIcons.solidPauseCircle)
-                                    : Icon(FontAwesomeIcons.solidStopCircle),
-                              ],
-                            ),
-                          ),
-                        );
-                      })
                   : controller.classDetails.value.dataClass?.host == 'BBB'
                       ? ListView.builder(
                           itemCount: controller

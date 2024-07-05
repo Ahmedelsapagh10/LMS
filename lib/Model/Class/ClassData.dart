@@ -1,5 +1,4 @@
 import 'BbbMeeting.dart';
-import 'JitsiMeeting.dart';
 import 'ZoomMeeting.dart';
 
 class ClassData {
@@ -23,7 +22,6 @@ class ClassData {
     this.totalClass,
     this.zoomMeetings,
     this.bbbMeetings,
-    this.jitsiMeetings,
   });
 
   dynamic id;
@@ -45,7 +43,6 @@ class ClassData {
   dynamic totalClass;
   List<ZoomMeeting>? zoomMeetings;
   List<BbbMeeting>? bbbMeetings;
-  List<JitsiMeeting>? jitsiMeetings;
 
   factory ClassData.fromJson(Map<String, dynamic> json) => ClassData(
         id: json["id"],
@@ -77,10 +74,6 @@ class ClassData {
             ? null
             : List<BbbMeeting>.from(
                 json["bbb_meetings"].map((x) => BbbMeeting.fromJson(x))),
-        jitsiMeetings: json["jitsi_meetings"] == null
-            ? null
-            : List<JitsiMeeting>.from(
-                json["jitsi_meetings"].map((x) => JitsiMeeting.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -106,7 +99,5 @@ class ClassData {
         "zoom_meetings":
             List<dynamic>.from(zoomMeetings?.map((x) => x.toJson()) ?? []),
         "bbb_meetings": List<dynamic>.from(bbbMeetings?.map((x) => x.toJson()) ?? []),
-        "jitsi_meetings":
-            List<dynamic>.from(jitsiMeetings?.map((x) => x.toJson()) ?? []),
       };
 }

@@ -234,14 +234,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.4.3+1"
-  eko_jitsi:
-    dependency: "direct main"
-    description:
-      name: eko_jitsi
-      sha256: d6d771c33c44b1f267cb91578e4af5a72b1052d4e77454aadf0b3250b6c6dae3
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.3.8"
   eventify:
     dependency: transitive
     description:
