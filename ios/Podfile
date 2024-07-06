@@ -44,7 +44,7 @@ platform :ios, '14.7'
       config.build_settings['EXPANDED_CODE_SIGN_IDENTITY'] = ""
       config.build_settings['CODE_SIGNING_REQUIRED'] = "NO"
       config.build_settings['CODE_SIGNING_ALLOWED'] = "NO"
-      config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = "NO"
+      config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = "YES"
      end
   end
 end
