@@ -3,22 +3,17 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
-
 // Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 // Package imports:
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:lms_flutter_app/utils/DefaultLoadingWidget.dart';
-
 // Project imports:
 import 'package:lms_flutter_app/Config/app_config.dart';
 import 'package:lms_flutter_app/Controller/course_details_tab_controller.dart';
@@ -36,6 +31,7 @@ import 'package:lms_flutter_app/utils/CustomAlertBox.dart';
 import 'package:lms_flutter_app/utils/CustomExpansionTileCard.dart';
 import 'package:lms_flutter_app/utils/CustomSnackBar.dart';
 import 'package:lms_flutter_app/utils/CustomText.dart';
+import 'package:lms_flutter_app/utils/DefaultLoadingWidget.dart';
 import 'package:lms_flutter_app/utils/MediaUtils.dart';
 import 'package:lms_flutter_app/utils/SliverAppBarTitleWidget.dart';
 import 'package:lms_flutter_app/utils/styles.dart';
@@ -107,9 +103,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
       body: LoaderOverlay(
         useDefaultLoading: false,
         overlayWidgetBuilder: (_) {
-          return Center(
-              child: defaultLoadingWidget
-          );
+          return Center(child: defaultLoadingWidget);
         },
         child: Obx(() {
           if (controller.isCourseLoading.value)
@@ -196,7 +190,7 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
   Widget descriptionWidget(
       HomeController controller, DashboardController dashboardController) {
     return ExtendedVisibilityDetector(
-      uniqueKey:  const Key('Tab1'),
+      uniqueKey: const Key('Tab1'),
       child: Obx(() {
         return Scaffold(
           body: ListView(
@@ -366,7 +360,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                     CustomerInfo purchaserInfo =
                                         await Purchases.purchaseProduct(
                                             controller.courseDetails.value
-                                                .iapProductId ?? '');
+                                                    .iapProductId ??
+                                                '');
                                     print(jsonEncode(purchaserInfo.toJson()));
 
                                     await controller
@@ -460,7 +455,9 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
               var lessons = controller.courseDetails.value.lessons
                   ?.where((element) =>
                       int.parse(element.chapterId.toString()) ==
-                      int.parse(controller.courseDetails.value.chapters![index].id.toString()))
+                      int.parse(controller
+                          .courseDetails.value.chapters![index].id
+                          .toString()))
                   .toList();
               var total = 0;
               lessons?.forEach((element) {
@@ -492,7 +489,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                     ),
                     Expanded(
                       child: Text(
-                        controller.courseDetails.value.chapters?[index].name ?? '',
+                        controller.courseDetails.value.chapters?[index].name ??
+                            '',
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -600,7 +598,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                   context.loaderOverlay.hide();
                                 } else if (lessons?[index].host == "SCORM") {
                                   var videoUrl;
-                                  videoUrl = rootUrl + (lessons?[index].videoUrl ?? '');
+                                  videoUrl = rootUrl +
+                                      (lessons?[index].videoUrl ?? '');
 
                                   final LessonController lessonController =
                                       Get.put(LessonController());
@@ -620,7 +619,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                     );
                                     context.loaderOverlay.hide();
                                   });
-                                } else if (lessons?[index].host == "VdoCipher") {
+                                } else if (lessons?[index].host ==
+                                    "VdoCipher") {
                                   await generateVdoCipherOtp(
                                           lessons?[index].videoUrl)
                                       .then((value) {
@@ -651,8 +651,9 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                 } else {
                                   var videoUrl;
                                   if (lessons?[index].host == "Self") {
-                                    videoUrl =
-                                        rootUrl + "/" + (lessons?[index].videoUrl ?? '');
+                                    videoUrl = rootUrl +
+                                        "/" +
+                                        (lessons?[index].videoUrl ?? '');
                                     Get.bottomSheet(
                                       VideoPlayerPage(
                                         "network",
@@ -677,8 +678,9 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                     );
                                     context.loaderOverlay.hide();
                                   } else if (lessons?[index].host == "PDF") {
-                                    videoUrl =
-                                        rootUrl + "/" + (lessons?[index].videoUrl ?? '');
+                                    videoUrl = rootUrl +
+                                        "/" +
+                                        (lessons?[index].videoUrl ?? '');
                                     Get.to(() => PDFViewPage(
                                           pdfLink: videoUrl,
                                         ));
@@ -785,11 +787,25 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                       Expanded(
                                         child: Container(
                                           child: lessons?[index].isQuiz == 1
-                                              ? Text(
-                                                  lessons?[index].quiz?[0].title.toString() ?? "",
-                                                  style:
-                                                      Get.textTheme.titleSmall,
-                                                )
+                                              ? (lessons?[index].quiz != null &&
+                                                      (lessons?[index]
+                                                              .quiz
+                                                              ?.isNotEmpty ??
+                                                          false)
+                                                  ? Text(
+                                                      lessons?[index]
+                                                              .quiz?[0]
+                                                              .title
+                                                              .toString() ??
+                                                          "No Title",
+                                                      style: Get
+                                                          .textTheme.titleSmall,
+                                                    )
+                                                  : Text(
+                                                      "No Quiz Available",
+                                                      style: Get
+                                                          .textTheme.titleSmall,
+                                                    ))
                                               : Text(
                                                   lessons?[index].name ?? "",
                                                   style:
@@ -985,8 +1001,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                                   height: 40,
                                                   width: 40,
                                                   image: dashboardController
-                                                          .profileData.image
-                                                          !.contains('public/')
+                                                          .profileData.image!
+                                                          .contains('public/')
                                                       ? NetworkImage(
                                                           "$rootUrl/${dashboardController.profileData.image ?? ""}")
                                                       : NetworkImage(
@@ -998,8 +1014,9 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                                   //     OctoPlaceholder.blurHash(
                                                   //   'LEHV6nWB2yk8pyo0adR*.7kCMdnj',
                                                   // ),
-                                                  placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
-
+                                                  placeholderBuilder:
+                                                      OctoPlaceholder
+                                                          .circularProgressIndicator(),
                                                 ),
                                               ),
                                             ),
@@ -1082,8 +1099,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                         ),
                                         child: Text(
                                           "${stctrl.lang["Submit Review"]}",
-                                          style:
-                                              Get.textTheme.titleSmall?.copyWith(
+                                          style: Get.textTheme.titleSmall
+                                              ?.copyWith(
                                             color: Colors.white,
                                           ),
                                           textAlign: TextAlign.center,
@@ -1130,8 +1147,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 controller.courseDetails.value.reviews![index]
-                                        .userImage
-                                        !.contains('public/')
+                                        .userImage!
+                                        .contains('public/')
                                     ? CircleAvatar(
                                         radius: 20.0,
                                         backgroundColor: Color(0xFFD7598F),
@@ -1142,7 +1159,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                         backgroundColor: Color(0xFFD7598F),
                                         backgroundImage: NetworkImage(
                                           controller.courseDetails.value
-                                              .reviews?[index].userImage ?? '',
+                                                  .reviews?[index].userImage ??
+                                              '',
                                         )),
                                 SizedBox(
                                   width: 10,
@@ -1156,15 +1174,19 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                       children: [
                                         Row(
                                           children: [
-                                            cartTotal(controller.courseDetails
-                                                .value.reviews?[index].userName ?? ''),
+                                            cartTotal(controller
+                                                    .courseDetails
+                                                    .value
+                                                    .reviews?[index]
+                                                    .userName ??
+                                                ''),
                                             Expanded(
                                               child: Container(),
                                             ),
                                             StarCounterWidget(
                                               value: controller.courseDetails
-                                                  .value.reviews![index].star
-                                                  !.toDouble(),
+                                                  .value.reviews![index].star!
+                                                  .toDouble(),
                                               color: Color(0xffFFCF23),
                                               size: 10,
                                             ),
@@ -1173,10 +1195,11 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                         Container(
                                           margin: EdgeInsets.only(left: 0),
                                           child: courseStructure(controller
-                                              .courseDetails
-                                              .value
-                                              .reviews?[index]
-                                              .comment ?? ''),
+                                                  .courseDetails
+                                                  .value
+                                                  .reviews?[index]
+                                                  .comment ??
+                                              ''),
                                         )
                                       ],
                                     ),

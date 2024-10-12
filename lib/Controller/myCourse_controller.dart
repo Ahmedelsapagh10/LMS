@@ -3,11 +3,10 @@ import 'dart:convert';
 
 // Flutter imports:
 import 'package:flutter/cupertino.dart';
-
 // Package imports:
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
-
 // Project imports:
 import 'package:lms_flutter_app/Config/app_config.dart';
 import 'package:lms_flutter_app/Controller/account_controller.dart';
@@ -16,6 +15,7 @@ import 'package:lms_flutter_app/Controller/home_controller.dart';
 import 'package:lms_flutter_app/Controller/my_course_details_tab_controller.dart';
 import 'package:lms_flutter_app/Model/Course/CourseMain.dart';
 import 'package:lms_flutter_app/Model/Course/Lesson.dart';
+import 'package:lms_flutter_app/Model/User/User.dart';
 import 'package:lms_flutter_app/Service/RemoteService.dart';
 import 'package:lms_flutter_app/utils/CustomSnackBar.dart';
 
@@ -44,6 +44,8 @@ class MyCourseController extends GetxController {
   var totalCourseProgress = 0.obs;
 
   var selectedLessonID = 0.obs;
+  var profileData = User().obs;
+  GetStorage userToken = GetStorage();
 
   final TextEditingController commentController = TextEditingController();
 
@@ -52,6 +54,8 @@ class MyCourseController extends GetxController {
 
   @override
   void onInit() {
+    getProfileData();
+
     fetchMyCourse();
     super.onInit();
   }
@@ -66,13 +70,23 @@ class MyCourseController extends GetxController {
         myCourses.value = products;
       }
       return products;
-    } catch(e, t){
+    } catch (e, t) {
       print('$e');
       print('$t');
     } finally {
       isLoading(false);
     }
     return null;
+  }
+
+  Future<User?> getProfileData() async {
+    String token = await userToken.read(tokenKey);
+    try {
+      var products = await RemoteServices.getProfile(token);
+      profileData.value = products ?? User();
+      print("_________${profileData.value.email}__${token}_____");
+      return products;
+    } finally {}
   }
 
   // get course details
@@ -83,7 +97,7 @@ class MyCourseController extends GetxController {
         myCourseDetails.value = value ?? CourseMain();
       });
       return myCourseDetails.value;
-    } catch(e, t){
+    } catch (e, t) {
       print('$e');
       print('$t');
     } finally {
@@ -111,7 +125,7 @@ class MyCourseController extends GetxController {
         //show error message
         return null;
       }
-    } catch(e, t){
+    } catch (e, t) {
       print('$e');
       print('$t');
     } finally {}
@@ -130,27 +144,23 @@ class MyCourseController extends GetxController {
 
     request.fields['course_id'] = courseId.toString();
     request.fields['comment'] = comment;
-    request
-        .send()
-        .then((result) async {
-          http.Response.fromStream(result).then((response) {
-            var jsonString = jsonDecode(response.body);
-            if (jsonString['success'] == false) {
-              CustomSnackBar().snackBarError(jsonString['message']);
-            } else {
-              CustomSnackBar().snackBarSuccess(jsonString['message']);
+    request.send().then((result) async {
+      http.Response.fromStream(result).then((response) {
+        var jsonString = jsonDecode(response.body);
+        if (jsonString['success'] == false) {
+          CustomSnackBar().snackBarError(jsonString['message']);
+        } else {
+          CustomSnackBar().snackBarSuccess(jsonString['message']);
 
-              getCourseDetails();
-              commentController.text = "";
-              myCourseDetailsTabController.controller?.animateTo(2);
-            }
-            return response.body;
-          });
-        })
-        .catchError((err) {
+          getCourseDetails();
+          commentController.text = "";
+          myCourseDetailsTabController.controller?.animateTo(2);
+        }
+        return response.body;
+      });
+    }).catchError((err) {
       print('error : ' + err.toString());
-    } )
-        .whenComplete(() {});
+    }).whenComplete(() {});
   }
 
   @override

@@ -226,16 +226,18 @@ class RegisterPage extends GetView<DashboardController> {
                 ),
               ),
               Center(
-                child: InkWell(
-                  onTap: () {
-                    controller.showRegisterScreen();
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(top: 15),
-                    child: Text(
-                      "${stctrl.lang["Already have an account? Login now"]}",
-                      style: Get.textTheme.titleMedium?.copyWith(
-                        fontSize: 16,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 15),
+                  child: TextButton(
+                    onPressed: () {
+                      controller.showRegisterScreen();
+                    },
+                    child: Container(
+                      child: Text(
+                        "${stctrl.lang["Already have an account? Login now"]}",
+                        style: Get.textTheme.titleMedium?.copyWith(
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ),

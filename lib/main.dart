@@ -4,31 +4,27 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:connection_notifier/connection_notifier.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 // Package imports:
 
 import 'package:http/http.dart' as http;
-
-import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:lms_flutter_app/Config/app_config.dart';
 import 'package:lms_flutter_app/Model/Settings/Settings.dart';
 import 'package:lms_flutter_app/Service/iap_service.dart';
 import 'package:lms_flutter_app/Views/SplashScreen.dart';
-import 'package:lms_flutter_app/utils/styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Bindings/dashboard_binding.dart';
 import 'Config/themes.dart';
 import 'Service/theme_service.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 class MyHttpoverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {

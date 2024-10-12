@@ -1,21 +1,17 @@
 // Flutter imports:
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-
 // Package imports:
 
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lms_flutter_app/Config/app_config.dart';
-
 // Project imports:
 import 'package:lms_flutter_app/Controller/dashboard_controller.dart';
 import 'package:lms_flutter_app/Views/Account/register_page.dart';
-
 import 'package:lms_flutter_app/utils/widgets/AppBarWidget.dart';
 
 // ignore: must_be_immutable
@@ -357,22 +353,25 @@ class SignInPage extends GetView<DashboardController> {
                     //     ],
                     //   ),
                     // ),
-                    // // Center(
-                    //   child: InkWell(
-                    //     onTap: () {
-                    //       controller.showRegisterScreen();
-                    //     },
-                    //     child: Container(
-                    //       margin: EdgeInsets.only(top: 15),
-                    //       child: Text( // Don\'t have an Account? Register now
-                    //         "${stctrl.lang[""]}",
-                    //         style: Get.textTheme.titleMedium?.copyWith(
-                    //           fontSize: 16,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
+                    Center(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 15),
+                        child: TextButton(
+                          onPressed: () {
+                            controller.showRegisterScreen();
+                          },
+                          child: Container(
+                            child: Text(
+                              // Don\'t have an Account? Register now
+                              "${stctrl.lang["Don\'t have an Account? Register now"]}",
+                              style: Get.textTheme.titleMedium?.copyWith(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                     SizedBox(
                       height: kBottomNavigationBarHeight,
                     ),

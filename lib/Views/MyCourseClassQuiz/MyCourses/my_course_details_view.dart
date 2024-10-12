@@ -5,20 +5,14 @@ import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
-
 // Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// Package imports:
-
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-import 'package:lms_flutter_app/utils/DefaultLoadingWidget.dart';
-
 // Project imports:
 import 'package:lms_flutter_app/Config/app_config.dart';
 import 'package:lms_flutter_app/Controller/download_controller.dart';
@@ -38,6 +32,7 @@ import 'package:lms_flutter_app/Views/VideoView/VimeoPlayerPage.dart';
 import 'package:lms_flutter_app/utils/CustomExpansionTileCard.dart';
 import 'package:lms_flutter_app/utils/CustomSnackBar.dart';
 import 'package:lms_flutter_app/utils/CustomText.dart';
+import 'package:lms_flutter_app/utils/DefaultLoadingWidget.dart';
 import 'package:lms_flutter_app/utils/MediaUtils.dart';
 import 'package:lms_flutter_app/utils/SliverAppBarTitleWidget.dart';
 import 'package:lms_flutter_app/utils/styles.dart';
@@ -122,11 +117,9 @@ class _MyCourseDetailsViewState extends State<MyCourseDetailsView> {
     return Scaffold(
       body: LoaderOverlay(
         useDefaultLoading: false,
-          overlayWidgetBuilder: (_) {
-            return Center(
-                child: defaultLoadingWidget
-            );
-          },
+        overlayWidgetBuilder: (_) {
+          return Center(child: defaultLoadingWidget);
+        },
         child: Obx(() {
           if (controller.isMyCourseLoading.value)
             return Center(
@@ -331,18 +324,19 @@ class _MyCourseDetailsViewState extends State<MyCourseDetailsView> {
                                         content: Column(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-
                                             Text(
                                               "Start Quiz",
                                               style: GoogleFonts.roboto(
                                                 textStyle: TextStyle(
                                                     color: Colors.black,
                                                     fontSize: 16
-                                                  // Add other text styles like fontSize, fontWeight, etc. here
-                                                ),
+                                                    // Add other text styles like fontSize, fontWeight, etc. here
+                                                    ),
                                               ),
                                             ),
-                                            SizedBox(height: 20,),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
                                             courseStructure(
                                               "${stctrl.lang["Do you want to start the quiz?"]}",
                                             ),
@@ -642,9 +636,17 @@ class _MyCourseDetailsViewState extends State<MyCourseDetailsView> {
                                           padding:
                                               const EdgeInsets.only(top: 2.0),
                                           child: Text(
-                                              lessons?[index].quiz?[0].title?[
-                                                      stctrl.code.value] ??
-                                                  "${lessons?[index].quiz?[0].title?['en']}",
+                                              lessons?[index].quiz != null ||
+                                                      (lessons?[index]
+                                                              .quiz
+                                                              ?.isEmpty ??
+                                                          false)
+                                                  ? "No Quiz Available"
+                                                  : lessons?[index]
+                                                              .quiz?[0]
+                                                              .title?[
+                                                          stctrl.code.value] ??
+                                                      "${lessons?[index].quiz?[0].title?['en']}",
                                               style: Get.textTheme.titleSmall),
                                         ),
                                       ),
@@ -757,6 +759,8 @@ class _MyCourseDetailsViewState extends State<MyCourseDetailsView> {
                                           "network",
                                           lesson: lessons?[index] ?? Lesson(),
                                           videoID: videoUrl,
+                                          email: controller
+                                              .profileData.value.email,
                                         ),
                                         backgroundColor: Colors.black,
                                         isScrollControlled: true,
@@ -770,6 +774,8 @@ class _MyCourseDetailsViewState extends State<MyCourseDetailsView> {
                                           "network",
                                           lesson: lessons?[index] ?? Lesson(),
                                           videoID: videoUrl,
+                                          email: controller
+                                              .profileData.value.email,
                                         ),
                                         backgroundColor: Colors.black,
                                         isScrollControlled: true,
@@ -1032,8 +1038,9 @@ class _MyCourseDetailsViewState extends State<MyCourseDetailsView> {
                                 height: 40,
                                 width: 40,
                                 image: controller.myCourseDetails.value
-                                        .comments![index].user!.image
-                                        ?.contains('public/')??false
+                                            .comments![index].user!.image
+                                            ?.contains('public/') ??
+                                        false
                                     ? NetworkImage(
                                         '$rootUrl/${controller.myCourseDetails.value.comments?[index].user?.image}')
                                     : NetworkImage(controller
@@ -1046,8 +1053,8 @@ class _MyCourseDetailsViewState extends State<MyCourseDetailsView> {
                                 // placeholderBuilder: OctoPlaceholder.blurHash(
                                 //   'LEHV6nWB2yk8pyo0adR*.7kCMdnj',
                                 // ),
-                                placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
-
+                                placeholderBuilder:
+                                    OctoPlaceholder.circularProgressIndicator(),
                               ),
                             ),
                             SizedBox(
@@ -1133,7 +1140,9 @@ class _MyCourseDetailsViewState extends State<MyCourseDetailsView> {
                     fit: BoxFit.cover,
                     height: 40,
                     width: 40,
-                    image: controller.dashboardController.profileData.image?.contains('public')??false
+                    image: controller.dashboardController.profileData.image
+                                ?.contains('public') ??
+                            false
                         ? NetworkImage(
                             '$rootUrl/${controller.dashboardController.profileData.image ?? ""}')
                         : NetworkImage(
@@ -1141,8 +1150,8 @@ class _MyCourseDetailsViewState extends State<MyCourseDetailsView> {
                     // placeholderBuilder: OctoPlaceholder.blurHash(
                     //   'LEHV6nWB2yk8pyo0adR*.7kCMdnj',
                     // ),
-                    placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
-
+                    placeholderBuilder:
+                        OctoPlaceholder.circularProgressIndicator(),
                   ),
                 ),
               ),
