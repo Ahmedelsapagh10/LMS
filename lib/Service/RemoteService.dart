@@ -157,7 +157,14 @@ class RemoteServices {
     }
   }
 
-  static Future register(name, email, phone, password, confirmPassword) async {
+  static Future register(
+    name,
+    email,
+    phone,
+    password,
+    confirmPassword,
+    identificationNumber,
+  ) async {
     Uri signUpUrl = Uri.parse(baseUrl + '/signup');
     Map data = {
       "name": name.toString(),
@@ -165,6 +172,7 @@ class RemoteServices {
       "phone": phone.toString(),
       "password": password.toString(),
       "password_confirmation": confirmPassword.toString(),
+      "identification_number": identificationNumber.toString(),
     };
     //encode Map to JSON
     var body = json.encode(data);
@@ -173,10 +181,11 @@ class RemoteServices {
     final log = Logger('ExampleLogger');
     Logger.root.level = Level.ALL; // defaults to Level.INFO
     Logger.root.onRecord.listen((record) {
-      print('${record.level.name}: ${record.time}: ${record.message}');});
+      print('${record.level.name}: ${record.time}: ${record.message}');
+    });
     log.shout('Heloooooooooooooooooooo: $jsonString');
 
-    if (jsonString.toString().contains('success: true')){
+    if (jsonString.toString().contains('success: true')) {
       return jsonString;
     } else {
       Get.snackbar(

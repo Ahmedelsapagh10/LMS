@@ -1,12 +1,10 @@
 // Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 // Package imports:
 
 import 'package:get/get.dart';
 import 'package:lms_flutter_app/Config/app_config.dart';
-
 // Project imports:
 import 'package:lms_flutter_app/Controller/dashboard_controller.dart';
 
@@ -71,6 +69,7 @@ class RegisterPage extends GetView<DashboardController> {
                 padding: EdgeInsets.only(left: 30, right: 30),
                 child: TextField(
                   controller: controller.registerEmail,
+                  keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.only(
                         left: 15, top: 13, bottom: 0, right: 15),

@@ -7,7 +7,6 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 // Package imports:
 
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lms_flutter_app/Config/app_config.dart';
 // Project imports:
 import 'package:lms_flutter_app/Controller/dashboard_controller.dart';
@@ -16,7 +15,7 @@ import 'package:lms_flutter_app/utils/widgets/AppBarWidget.dart';
 
 // ignore: must_be_immutable
 class SignInPage extends GetView<DashboardController> {
-  final _googleSignIn = GoogleSignIn();
+  // final _googleSignIn = GoogleSignIn();
 
   Map<String, dynamic>? userData;
   AccessToken? _accessToken;
@@ -95,6 +94,7 @@ class SignInPage extends GetView<DashboardController> {
                       child: TextField(
                         controller: controller.password,
                         obscureText: controller.obscurePass.value,
+                        keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.only(
                               left: 15, top: 13, bottom: 0, right: 15),

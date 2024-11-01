@@ -125,6 +125,7 @@ class DownloadController extends GetxController
       pd.close();
       CustomSnackBar()
           .snackBarError("${stctrl.lang["Error downloading file"]}");
+      return onError;
     });
     if (response.statusCode == 200) {
       return filePath;

@@ -5,6 +5,7 @@ import 'dart:math';
 
 // Flutter imports:
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 // Package imports:
@@ -20,6 +21,8 @@ import 'package:lms_flutter_app/Service/RemoteService.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 // import 'package:lms_flutter_app/utils/widgets/persistant_bottom_custom/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Views/Account/device_id_page.dart';
 
 class DashboardController extends GetxController {
   final CartController cartController = Get.find<CartController>();
@@ -132,26 +135,37 @@ class DashboardController extends GetxController {
       isLoading(true);
       var login = await RemoteServices.login(email.text, password.text);
       if (login != null) {
-        if (login['data']['is_verify'] != null) {
-          token = login['data']['access_token'];
-          loginMsg.value = login['message'];
-          if (token.length > 5) {
-            await saveToken(token);
-            await loadUserToken();
-            await setupNotification();
-            await stctrl.getLanguage();
+        if (login['data']["identification_number"] == await getDeviceId()) {
+          if (login['data']['is_verify'] != null) {
+            token = login['data']['access_token'];
+            loginMsg.value = login['message'] ?? "";
+            registerName.clear();
+            registerEmail.clear();
+            if (token.length > 5) {
+              await saveToken(token);
+              await loadUserToken();
+              await setupNotification();
+              await stctrl.getLanguage();
+            }
+            return login;
+          } else {
+            loginMsg.value = "${stctrl.lang["Not verified"]}";
+            Get.snackbar(
+              "${stctrl.lang["Verify Your Email Address"]}",
+              "${stctrl.lang["Before proceeding, please check your email for a verification link Login in Using that Link."]}",
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.redAccent,
+              colorText: Colors.white,
+              borderRadius: 5,
+              duration: Duration(seconds: 6),
+            );
           }
-          return login;
         } else {
-          loginMsg.value = "${stctrl.lang["Not verified"]}";
-          Get.snackbar(
-            "${stctrl.lang["Verify Your Email Address"]}",
-            "${stctrl.lang["Before proceeding, please check your email for a verification link Login in Using that Link."]}",
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.redAccent,
-            colorText: Colors.white,
-            borderRadius: 5,
-            duration: Duration(seconds: 6),
+          loginMsg.value = "${stctrl.lang["Not verified by admin."]}";
+          Get.to(
+            () => CopyDeviceIDPage(
+              token: login['data']['access_token'] ?? "",
+            ),
           );
         }
       }
@@ -208,8 +222,26 @@ class DashboardController extends GetxController {
     isRegisterScreen.value = !isRegisterScreen.value;
   }
 
+  Future<String> getDeviceId() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    String deviceId;
+
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      deviceId = androidInfo.id; // Unique ID on Android
+    } else if (Platform.isIOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      deviceId = iosInfo.identifierForVendor ??
+          Random(5).toString(); // Unique ID on iOS
+    } else {
+      deviceId = "unknown";
+    }
+    return deviceId;
+  }
+
   Future fetchUserRegister() async {
     try {
+      print("_______deviceid_______${await getDeviceId()}");
       isLoading(true);
       var login = await RemoteServices.register(
         registerName.text,
@@ -217,6 +249,7 @@ class DashboardController extends GetxController {
         registerPhone.text,
         registerPassword.text,
         registerConfirmPassword.text,
+        await getDeviceId(),
       );
       if (login != null) {
         if (login['success'] == true) {
@@ -306,7 +339,8 @@ class DashboardController extends GetxController {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     String firebaseAppToken = await messaging.getToken(
           // https://stackoverflow.com/questions/54996206/firebase-cloud-messaging-where-to-find-public-vapid-key
-          vapidKey: 'BD0KxWrfuUsYgZ0DLjLJGlq89kybkj0LJaefix9T0JOtuwVZte3eJkdlDlfUXOmry3z13T',
+          vapidKey:
+              'BD0KxWrfuUsYgZ0DLjLJGlq89kybkj0LJaefix9T0JOtuwVZte3eJkdlDlfUXOmry3z13T',
         ) ??
         '';
 
@@ -342,7 +376,8 @@ class DashboardController extends GetxController {
             NOTIFICATION_ID: Random().nextInt(2147483647),
             NOTIFICATION_CHANNEL_KEY: 'basic_channel',
             NOTIFICATION_TITLE: message.notification?.title,
-            NOTIFICATION_BODY: _parseHtmlString(message.notification?.body ?? ''),
+            NOTIFICATION_BODY:
+                _parseHtmlString(message.notification?.body ?? ''),
             NOTIFICATION_LAYOUT: 'Default',
           }
         };
@@ -391,7 +426,8 @@ class DashboardController extends GetxController {
 
   String _parseHtmlString(String htmlString) {
     final document = parse(htmlString);
-    final String parsedString = parse(document.body?.text).documentElement?.text ?? '';
+    final String parsedString =
+        parse(document.body?.text).documentElement?.text ?? '';
 
     return parsedString;
   }
