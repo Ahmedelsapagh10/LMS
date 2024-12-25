@@ -1,5 +1,6 @@
 // Dart imports:
 import 'dart:developer';
+import 'dart:math' as math;
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -13,11 +14,13 @@ import 'package:lms_flutter_app/utils/widgets/connectivity_checker_widget.dart';
 
 import 'package:vdocipher_flutter/vdocipher_flutter.dart';
 
+import '../../utils/customer_timer.dart';
+
 class VdoCipherPage extends StatefulWidget {
   final EmbedInfo? embedInfo;
   final Lesson? lesson;
-
-  VdoCipherPage({this.embedInfo, this.lesson});
+  String? email;
+  VdoCipherPage({this.embedInfo, this.lesson, this.email});
 
   @override
   _VdoCipherPageState createState() => _VdoCipherPageState();
@@ -31,7 +34,9 @@ class _VdoCipherPageState extends State<VdoCipherPage> {
 
   String nativeAndroidLibraryVersion = 'Unknown';
   final urlController = TextEditingController();
-
+  double _top = 10;
+  double _right = 10;
+  late CustomTimer _timer;
   @override
   void initState() {
     SystemChrome.setPreferredOrientations([
@@ -43,12 +48,38 @@ class _VdoCipherPageState extends State<VdoCipherPage> {
     // getOtpAndPlayBackInfo();
 
     log(widget.embedInfo.toString());
+    _timer = CustomTimer(
+      interval: Duration(seconds: 5),
+      onTick: _updatePosition,
+    );
 
+    _timer.start();
     super.initState();
+  }
+
+  void _updatePosition() {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // Define constraints
+    final maxTop =
+        screenHeight / 4; // Max value for `top` is half the screen height
+    final maxRight =
+        screenWidth / 4; // Max value for `right` is half the screen width
+
+    setState(() {
+      // Generate random values within the constrained range
+      _top = math.Random().nextDouble() * maxTop;
+      _right = math.Random().nextDouble() * maxRight;
+    });
+
+    debugPrint('Position updated: top=$_top, right=$_right');
   }
 
   @override
   void dispose() {
+    _timer.stop();
+
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     super.dispose();
   }
@@ -69,12 +100,33 @@ class _VdoCipherPageState extends State<VdoCipherPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Expanded(
-                        child: VdoPlayer(
-                          embedInfo: widget.embedInfo!,
-                          onPlayerCreated: (controller) =>
-                              _onPlayerCreated(controller),
-                          onError: _onVdoError,
-                          onFullscreenChange: _onFullscreenChange,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            VdoPlayer(
+                              embedInfo: widget.embedInfo!,
+                              onPlayerCreated: (controller) =>
+                                  _onPlayerCreated(controller),
+                              onError: _onVdoError,
+                              aspectRatio: 16 / 9,
+                              onFullscreenChange: _onFullscreenChange,
+                            ), //! Email of user
+                            PositionedDirectional(
+                              top: _top,
+                              end: _right,
+                              child: Container(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    widget.email ?? '',
+                                    style: TextStyle(
+                                        backgroundColor:
+                                            Colors.black.withOpacity(0.1)),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       ValueListenableBuilder(
@@ -120,7 +172,8 @@ class _VdoCipherPageState extends State<VdoCipherPage> {
       if (value.isEnded) {
         if (widget.lesson != null) {
           await lessonController
-              .updateLessonProgress(widget.lesson?.id, widget.lesson?.courseId, 1)
+              .updateLessonProgress(
+                  widget.lesson?.id, widget.lesson?.courseId, 1)
               .then((value) {
             Get.back();
           });

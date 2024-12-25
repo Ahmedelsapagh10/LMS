@@ -19,6 +19,7 @@ return [
     'Please Sign in' => 'Please Sign In',
     'Sign In' => 'Sign In',
     'Enter Your Email' => 'Enter Your Email',
+
     'Password' => 'Password',
     'All Courses' => 'All Courses',
     'Filter Courses' => 'Filter Courses',
@@ -253,4 +254,10 @@ return [
     'Facebook' => 'Facebook',
     'Google' => 'Google',
     'Hour(s)' => 'Hour(s)',
+    'Enter Your Code' => 'Charge the wallet',
+    'support team'=>'Support Team',
+    'Send' => 'Send',
+    'Enter Code' => 'Enter Code',
+
+
 ];

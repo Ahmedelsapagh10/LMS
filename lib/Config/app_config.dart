@@ -2,7 +2,7 @@
 import 'package:get/get.dart';
 import 'package:lms_flutter_app/Controller/site_controller.dart';
 
-final String appLogo = "logo.png";
+final String appLogo = "logox.png";
 
 //** CHANGE SPLASH SCREEN IMAGE
 final String splashLogo = "Splash.png";
@@ -26,7 +26,7 @@ Map<String, String> header({String? token}) {
   return {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
-     '$authHeader': '$isBearer' + '$token',
+    '$authHeader': '$isBearer' + '$token',
     // '$authHeader': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZTk4NDkzMTE5YjRkNWE3MjE5NGUxY2I0ZGM4ZDRkOTQ2MjkxMWFiMDZiMDdmNDUxMDYyZTkwMmZiNDJkNjNjOTc5Yzg5Njc3N2E2ODUzZmQiLCJpYXQiOjE3MDc5NzczOTEuNzkyMjc4LCJuYmYiOjE3MDc5NzczOTEuNzkyMjgxLCJleHAiOjE3Mzk1OTk3OTEuNzg0NzU4LCJzdWIiOiI0NDMiLCJzY29wZXMiOltdfQ.NiDosxPBObcu5gyRfHC2S9jo0HnuoIc2s5GZkkOXzZRj1pEOWom265kxuh1XW_K8Nn8TyTpTheYjY0m5hYypoe7PVg2lE5dyh6mE_C5L0GAzKUuExeRgNOhJ-E-YUjigpTA_8QLzQM5cA6NW-EUKWHT_Q7aeOQ3qT9q986GkdsR1RGbj_BOSBhHcLT-yDbKW-LJzQaF0IO_M38Mv7vBi1tbF5qLcl9F9qn7aZM052MyEf-pZSsDLG1JjnTyywQslscfihYVr4VrGXkWHkvfnfq8Ds-RMUFf3mhmkimeG1HX_3riwRFGEwrEkv55YpyvkbOZTGQSUL1ZuxPODSavolUg7MxTi1Qd91tPOPFLZCKB7g6jmm5iB_FEbHDiUHvUGYL5JpwbLBU6gdkcl7EGV8djAMKe2rua2uIqYUYbYlDD9G0KaTpl2I1Kn-oEW4KWWY-Z-OGcrL5HzcNWyoy7wvsXYgX3XzdSzRCsnl1y2rB7cyrBI-4w6d3gb-cvkfTSMmYYeDVSdp_3ZqD-H5GuQbEu3uUwRo3eH1Adg3nEX1s8ANjtdLgpyf8l7I4KRZz_lBX7-9AhpcMbusVPUcD0yfYnD5Ypl5bs_JCPidgWzkgzbl4haWm5rEU619wadMKj_u2BDQEeFrhW_BY7EAB24udnWs11L88NObwRSzw1RTI8',
 
     'ApiKey': apiKey
@@ -36,7 +36,7 @@ Map<String, String> header({String? token}) {
 final String baseUrl = rootUrl + "/api";
 
 //** Change App Title
-final String companyName = "InfixLMS";
+final String companyName = "Impulse Academy";
 
 //** Change Currency
 String appCurrency = '\$';

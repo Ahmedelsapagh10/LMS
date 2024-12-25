@@ -56,8 +56,6 @@ class HomePage extends GetView<HomeController> {
 
     return LoaderOverlay(
       useDefaultLoading: false,
-
-
       child: SafeArea(
         child: Scaffold(
           appBar: AppBarWidget(
@@ -591,7 +589,8 @@ class HomePage extends GetView<HomeController> {
                                             //     OctoPlaceholder.blurHash(
                                             //   'LEHV6nWB2yk8pyo0adR*.7kCMdnj',
                                             // ),
-                                            placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                                            placeholderBuilder: OctoPlaceholder
+                                                .circularProgressIndicator(),
 
                                             errorBuilder: (BuildContext context,
                                                 Object exception,

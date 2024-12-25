@@ -203,6 +203,8 @@ class RemoteServices {
 
   static Future<CourseMain?> getCourseDetails(int id) async {
     Uri topCatUrl = Uri.parse(baseUrl + '/get-course-details/$id');
+    print('url is : ${topCatUrl}');
+
     var response = await http.get(topCatUrl, headers: header());
     if (response.statusCode == 200) {
       var jsonString = jsonDecode(response.body);
@@ -218,6 +220,8 @@ class RemoteServices {
 
   static Future<CourseMain?> getMyCourseDetails(int id) async {
     Uri topCatUrl = Uri.parse(baseUrl + '/get-course-details/$id');
+    print('url is : ${topCatUrl}');
+
     var response = await http.get(topCatUrl, headers: header());
     if (response.statusCode == 200) {
       var jsonString = jsonDecode(response.body);
@@ -568,6 +572,26 @@ class RemoteServices {
       return true;
     } else {
       return null;
+    }
+  }
+
+  static Future<dynamic> addCodeToWallet(
+      {String? token, required String code}) async {
+    Uri url = Uri.parse(baseUrl + '/addToWallet');
+    var body = json.encode(code);
+    var response = await http.post(
+      url,
+      headers: header(token: token),
+      body: jsonEncode({"code": code}),
+    );
+    print('................00${response.body}');
+    print('................00 :: ${url}');
+    var jsonString = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      return jsonString;
+    } else {
+      return jsonString;
     }
   }
 }

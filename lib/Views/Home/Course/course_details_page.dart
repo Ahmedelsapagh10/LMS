@@ -46,6 +46,8 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vdocipher_flutter/vdocipher_flutter.dart';
 
+import '../../../Controller/myCourse_controller.dart';
+
 // ignore: must_be_immutable
 class CourseDetailsPage extends StatefulWidget {
   @override
@@ -468,6 +470,9 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                 }
               });
               final GlobalKey expansionTileKey = GlobalKey();
+              final MyCourseController controller2 =
+                  Get.put(MyCourseController());
+
               return CustomExpansionTileCard(
                 key: expansionTileKey,
                 contentPadding: EdgeInsets.symmetric(horizontal: 10),
@@ -577,6 +582,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
 
                                   Get.bottomSheet(
                                     VimeoPlayerPage(
+                                      email:
+                                          controller2.profileData.value.email,
                                       lesson: lessons?[index] ?? Lesson(),
                                       videoTitle: "${lessons?[index].name}",
                                       videoId: '$rootUrl/vimeo/video/$vimeoID',
@@ -589,6 +596,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                   Get.bottomSheet(
                                     VideoPlayerPage(
                                       "Youtube",
+                                      email:
+                                          controller2.profileData.value.email,
                                       lesson: lessons?[index] ?? Lesson(),
                                       videoID: lessons?[index].videoUrl ?? '',
                                     ),
@@ -610,6 +619,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                       .then((value) async {
                                     Get.bottomSheet(
                                       VimeoPlayerPage(
+                                        email:
+                                            controller2.profileData.value.email,
                                         lesson: lessons?[index] ?? Lesson(),
                                         videoTitle: lessons?[index].name ?? '',
                                         videoId: '$videoUrl',
@@ -636,6 +647,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
 
                                       Get.bottomSheet(
                                         VdoCipherPage(
+                                          email: controller2
+                                              .profileData.value.email,
                                           embedInfo: embedInfo,
                                         ),
                                         backgroundColor: Colors.black,
@@ -659,6 +672,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                         "network",
                                         lesson: lessons?[index] ?? Lesson(),
                                         videoID: videoUrl,
+                                        email:
+                                            controller2.profileData.value.email,
                                       ),
                                       backgroundColor: Colors.black,
                                       isScrollControlled: true,
@@ -672,6 +687,8 @@ class _CourseDetailsPageState extends State<CourseDetailsPage> {
                                         "network",
                                         lesson: lessons?[index] ?? Lesson(),
                                         videoID: videoUrl,
+                                        email:
+                                            controller2.profileData.value.email,
                                       ),
                                       backgroundColor: Colors.black,
                                       isScrollControlled: true,

@@ -57,6 +57,7 @@ class CourseMain {
     this.totalCompletePercentage,
     this.courseLevel,
     this.iapProductId,
+    this.whatsappLink,
   });
 
   dynamic id;
@@ -68,6 +69,7 @@ class CourseMain {
   dynamic langId;
   Map? title;
   String? slug;
+  String? whatsappLink;
   String? duration;
   String? image;
   String? thumbnail;
@@ -125,7 +127,7 @@ class CourseMain {
             json["discount_price"] == null ? 0 : json["discount_price"],
         publish: json["publish"],
         status: json["status"],
-         courseLevel: json["course_level"] == null
+        courseLevel: json["course_level"] == null
             ? null
             : CourseLevel.fromJson(json["course_level"]),
         trailerLink: json["trailer_link"],
@@ -173,6 +175,7 @@ class CourseMain {
         quiz: json["quiz"] == null ? null : Quiz.fromJson(json["quiz"]),
         totalCompletePercentage: json["totalCompletePercentage"],
         iapProductId: json["iap_product_id"],
+        whatsappLink: json["whatsapp_group_link"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -216,5 +219,6 @@ class CourseMain {
         "quiz": quiz?.toJson(),
         "course_level": courseLevel?.toJson(),
         "iap_product_id": iapProductId,
+        "whatsapp_group_link": whatsappLink,
       };
 }

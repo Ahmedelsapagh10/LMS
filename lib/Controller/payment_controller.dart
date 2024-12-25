@@ -162,82 +162,78 @@ class PaymentController extends GetxController {
       request.fields['phone'] = phoneController?.text ?? '';
       request.fields['email'] = emailController?.text ?? '';
 
-      request
-          .send()
-          .then((result) async {
-            http.Response.fromStream(result).then((response) {
-              var jsonString = jsonDecode(response.body);
-              if (response.statusCode == 200) {
-                email.value = emailController?.text ?? '';
+      request.send().then((result) async {
+        http.Response.fromStream(result).then((response) {
+          var jsonString = jsonDecode(response.body);
+          if (response.statusCode == 200) {
+            email.value = emailController?.text ?? '';
 
-                if (jsonString['type'] == 'Free') {
-                  cartController.cartList.value = [];
-                  cartController.update();
-                  cartController.getCartList();
-                  myCourseController.myCourses.value = [];
-                  myCourseController.fetchMyCourse();
-                  classController.allMyClass.value = [];
-                  classController.fetchAllMyClass();
-                  Future.delayed(Duration(seconds: 2), () {
-                    Get.back();
-                    dashboardController.changeTabIndex(2);
-                    Get.snackbar(
-                      "${stctrl.lang["Done"]}",
-                      jsonString['message'].toString(),
-                      snackPosition: SnackPosition.BOTTOM,
-                      backgroundColor: Get.theme.primaryColor,
-                      colorText: Colors.white,
-                      borderRadius: 5,
-                    );
-                  }).then((value) async {
-                    dashboardController.changeTabIndex(2);
-                    _courseClassQuizTabController.myCoursesController.myCourses
-                        .clear();
-                    await _courseClassQuizTabController.myCoursesController
-                        .fetchMyCourse();
-
-                    _courseClassQuizTabController.myClassController.allMyClass
-                        .clear();
-                    await _courseClassQuizTabController.myClassController
-                        .fetchAllMyClass();
-
-                    _courseClassQuizTabController.myQuizController.allMyQuiz
-                        .clear();
-                    await _courseClassQuizTabController.myQuizController
-                        .fetchAllMyQuiz();
-                  });
-                } else {
-                  Get.snackbar(
-                    "${stctrl.lang["Done"]}",
-                    jsonString['message'].toString(),
-                    snackPosition: SnackPosition.BOTTOM,
-                    backgroundColor: Get.theme.primaryColor,
-                    colorText: Colors.white,
-                    borderRadius: 5,
-                  );
-                  Future.delayed(Duration(seconds: 4), () {
-                    getPaymentList();
-                    Get.to(() => PaymentScreen());
-                  });
-                }
-              } else {
+            if (jsonString['type'] == 'Free') {
+              cartController.cartList.value = [];
+              cartController.update();
+              cartController.getCartList();
+              myCourseController.myCourses.value = [];
+              myCourseController.fetchMyCourse();
+              classController.allMyClass.value = [];
+              classController.fetchAllMyClass();
+              Future.delayed(Duration(seconds: 2), () {
+                Get.back();
+                dashboardController.changeTabIndex(2);
                 Get.snackbar(
-                  "${stctrl.lang["Failed"]}",
+                  "${stctrl.lang["Done"]}",
                   jsonString['message'].toString(),
                   snackPosition: SnackPosition.BOTTOM,
-                  backgroundColor: Colors.redAccent,
+                  backgroundColor: Get.theme.primaryColor,
                   colorText: Colors.white,
                   borderRadius: 5,
                 );
-              }
+              }).then((value) async {
+                dashboardController.changeTabIndex(2);
+                _courseClassQuizTabController.myCoursesController.myCourses
+                    .clear();
+                await _courseClassQuizTabController.myCoursesController
+                    .fetchMyCourse();
 
-              return response.body;
-            });
-          })
-          .catchError((err) {
+                _courseClassQuizTabController.myClassController.allMyClass
+                    .clear();
+                await _courseClassQuizTabController.myClassController
+                    .fetchAllMyClass();
+
+                _courseClassQuizTabController.myQuizController.allMyQuiz
+                    .clear();
+                await _courseClassQuizTabController.myQuizController
+                    .fetchAllMyQuiz();
+              });
+            } else {
+              Get.snackbar(
+                "${stctrl.lang["Done"]}",
+                jsonString['message'].toString(),
+                snackPosition: SnackPosition.BOTTOM,
+                backgroundColor: Get.theme.primaryColor,
+                colorText: Colors.white,
+                borderRadius: 5,
+              );
+              Future.delayed(Duration(seconds: 4), () {
+                getPaymentList();
+                Get.to(() => PaymentScreen());
+              });
+            }
+          } else {
+            Get.snackbar(
+              "${stctrl.lang["Failed"]}",
+              jsonString['message'].toString(),
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.redAccent,
+              colorText: Colors.white,
+              borderRadius: 5,
+            );
+          }
+
+          return response.body;
+        });
+      }).catchError((err) {
         print('error : ' + err.toString());
-      } )
-          .whenComplete(() {});
+      }).whenComplete(() {});
     } finally {
       isLoading(false);
     }
@@ -258,79 +254,75 @@ class PaymentController extends GetxController {
       request.fields['billing_address'] = "previous";
       request.fields['old_billing'] = oldBilling.value.toString();
 
-      request
-          .send()
-          .then((result) async {
-            http.Response.fromStream(result).then((response) {
-              var jsonString = jsonDecode(response.body);
-              if (response.statusCode == 200) {
-                if (jsonString['type'] == 'Free') {
-                  cartController.cartList.value = [];
-                  cartController.update();
-                  cartController.getCartList();
-                  myCourseController.myCourses.value = [];
-                  myCourseController.fetchMyCourse();
-                  classController.allMyClass.value = [];
-                  classController.fetchAllMyClass();
-                  Future.delayed(Duration(seconds: 2), () {
-                    Get.back();
-                    dashboardController.changeTabIndex(2);
-                    Get.snackbar(
-                      "${stctrl.lang["Done"]}",
-                      jsonString['message'].toString(),
-                      snackPosition: SnackPosition.BOTTOM,
-                      backgroundColor: Get.theme.primaryColor,
-                      colorText: Colors.white,
-                      borderRadius: 5,
-                    );
-                  }).then((value) async {
-                    _courseClassQuizTabController.myCoursesController.myCourses
-                        .clear();
-                    await _courseClassQuizTabController.myCoursesController
-                        .fetchMyCourse();
-
-                    _courseClassQuizTabController.myClassController.allMyClass
-                        .clear();
-                    await _courseClassQuizTabController.myClassController
-                        .fetchAllMyClass();
-
-                    _courseClassQuizTabController.myQuizController.allMyQuiz
-                        .clear();
-                    await _courseClassQuizTabController.myQuizController
-                        .fetchAllMyQuiz();
-                  });
-                } else {
-                  Get.snackbar(
-                    "${stctrl.lang["Done"]}",
-                    jsonString['message'].toString(),
-                    snackPosition: SnackPosition.BOTTOM,
-                    backgroundColor: Get.theme.primaryColor,
-                    colorText: Colors.white,
-                    borderRadius: 5,
-                  );
-                  Future.delayed(Duration(seconds: 4), () {
-                    getPaymentList();
-                    Get.to(() => PaymentScreen());
-                  });
-                }
-              } else {
+      request.send().then((result) async {
+        http.Response.fromStream(result).then((response) {
+          var jsonString = jsonDecode(response.body);
+          if (response.statusCode == 200) {
+            if (jsonString['type'] == 'Free') {
+              cartController.cartList.value = [];
+              cartController.update();
+              cartController.getCartList();
+              myCourseController.myCourses.value = [];
+              myCourseController.fetchMyCourse();
+              classController.allMyClass.value = [];
+              classController.fetchAllMyClass();
+              Future.delayed(Duration(seconds: 2), () {
+                Get.back();
+                dashboardController.changeTabIndex(2);
                 Get.snackbar(
-                  "${stctrl.lang["Failed"]}",
+                  "${stctrl.lang["Done"]}",
                   jsonString['message'].toString(),
                   snackPosition: SnackPosition.BOTTOM,
-                  backgroundColor: Colors.redAccent,
+                  backgroundColor: Get.theme.primaryColor,
                   colorText: Colors.white,
                   borderRadius: 5,
                 );
-              }
+              }).then((value) async {
+                _courseClassQuizTabController.myCoursesController.myCourses
+                    .clear();
+                await _courseClassQuizTabController.myCoursesController
+                    .fetchMyCourse();
 
-              return response.body;
-            });
-          })
-          .catchError((err) {
+                _courseClassQuizTabController.myClassController.allMyClass
+                    .clear();
+                await _courseClassQuizTabController.myClassController
+                    .fetchAllMyClass();
+
+                _courseClassQuizTabController.myQuizController.allMyQuiz
+                    .clear();
+                await _courseClassQuizTabController.myQuizController
+                    .fetchAllMyQuiz();
+              });
+            } else {
+              Get.snackbar(
+                "${stctrl.lang["Done"]}",
+                jsonString['message'].toString(),
+                snackPosition: SnackPosition.BOTTOM,
+                backgroundColor: Get.theme.primaryColor,
+                colorText: Colors.white,
+                borderRadius: 5,
+              );
+              Future.delayed(Duration(seconds: 4), () {
+                getPaymentList();
+                Get.to(() => PaymentScreen());
+              });
+            }
+          } else {
+            Get.snackbar(
+              "${stctrl.lang["Failed"]}",
+              jsonString['message'].toString(),
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.redAccent,
+              colorText: Colors.white,
+              borderRadius: 5,
+            );
+          }
+
+          return response.body;
+        });
+      }).catchError((err) {
         print('error : ' + err.toString());
-      } )
-          .whenComplete(() {});
+      }).whenComplete(() {});
     } finally {
       isLoading(false);
     }
@@ -349,66 +341,62 @@ class PaymentController extends GetxController {
 
       request.fields['response'] = resp.toString();
 
-      request
-          .send()
-          .then((result) async {
-            http.Response.fromStream(result).then((response) {
-              var jsonString = jsonDecode(response.body);
-              if (response.statusCode == 200 && jsonString['success'] == true) {
-                cartController.cartList.value = [];
-                cartController.update();
-                cartController.getCartList();
-                // myCourseController.myCourses.value = [];
-                // myCourseController.fetchMyCourse();
-                Future.delayed(Duration(seconds: 2), () {
-                  Get.back();
-                  Get.back();
-                  dashboardController.changeTabIndex(2);
-                  Get.snackbar(
-                    "${stctrl.lang["Done"]}",
-                    jsonString['message'].toString(),
-                    snackPosition: SnackPosition.BOTTOM,
-                    backgroundColor: Get.theme.primaryColor,
-                    colorText: Colors.white,
-                    borderRadius: 5,
-                  );
-                }).then((value) async {
-                  dashboardController.changeTabIndex(2);
-                  _courseClassQuizTabController.myCoursesController.myCourses
-                      .clear();
-                  await _courseClassQuizTabController.myCoursesController
-                      .fetchMyCourse();
+      request.send().then((result) async {
+        http.Response.fromStream(result).then((response) {
+          var jsonString = jsonDecode(response.body);
+          if (response.statusCode == 200 && jsonString['success'] == true) {
+            cartController.cartList.value = [];
+            cartController.update();
+            cartController.getCartList();
+            // myCourseController.myCourses.value = [];
+            // myCourseController.fetchMyCourse();
+            Future.delayed(Duration(seconds: 2), () {
+              Get.back();
+              Get.back();
+              dashboardController.changeTabIndex(2);
+              Get.snackbar(
+                "${stctrl.lang["Done"]}",
+                jsonString['message'].toString(),
+                snackPosition: SnackPosition.BOTTOM,
+                backgroundColor: Get.theme.primaryColor,
+                colorText: Colors.white,
+                borderRadius: 5,
+              );
+            }).then((value) async {
+              dashboardController.changeTabIndex(2);
+              _courseClassQuizTabController.myCoursesController.myCourses
+                  .clear();
+              await _courseClassQuizTabController.myCoursesController
+                  .fetchMyCourse();
 
-                  _courseClassQuizTabController.myClassController.allMyClass
-                      .clear();
-                  await _courseClassQuizTabController.myClassController
-                      .fetchAllMyClass();
+              _courseClassQuizTabController.myClassController.allMyClass
+                  .clear();
+              await _courseClassQuizTabController.myClassController
+                  .fetchAllMyClass();
 
-                  _courseClassQuizTabController.myQuizController.allMyQuiz
-                      .clear();
-                  await _courseClassQuizTabController.myQuizController
-                      .fetchAllMyQuiz();
-                });
-              } else {
-                Get.snackbar(
-                  "${stctrl.lang["Failed"]}",
-                  jsonString['message'].toString(),
-                  snackPosition: SnackPosition.BOTTOM,
-                  backgroundColor: Colors.redAccent,
-                  colorText: Colors.white,
-                  borderRadius: 5,
-                );
-              }
-
-              return response.body;
+              _courseClassQuizTabController.myQuizController.allMyQuiz.clear();
+              await _courseClassQuizTabController.myQuizController
+                  .fetchAllMyQuiz();
             });
-          })
-          .catchError((err) {
+          } else {
+            Get.snackbar(
+              "${stctrl.lang["Failed"]}",
+              jsonString['message'].toString(),
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.redAccent,
+              colorText: Colors.white,
+              borderRadius: 5,
+            );
+          }
+          print('....${jsonString['message']}');
+
+          return response.body;
+        });
+      }).catchError((err) {
         print('error : ' + err.toString());
-      } )
-          .whenComplete(() {
-            Get.back();
-          });
+      }).whenComplete(() {
+        Get.back();
+      });
     } finally {
       isLoading(false);
     }
@@ -439,8 +427,7 @@ class PaymentController extends GetxController {
         duration: Duration(seconds: 5),
       );
       await makePayment('Sslcommerz', {});
-    }
-    else if (message == 'failed') {
+    } else if (message == 'failed') {
       Get.snackbar(
         "Oops",
         "Payment failed",
@@ -450,8 +437,7 @@ class PaymentController extends GetxController {
         borderRadius: 5,
         duration: Duration(seconds: 5),
       );
-    }
-    else if (message == 'cancel') {
+    } else if (message == 'cancel') {
       Get.snackbar(
         "Oops",
         "Payment failed",

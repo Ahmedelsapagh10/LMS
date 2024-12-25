@@ -57,7 +57,7 @@ class CartController extends GetxController {
     try {
       // isLoading(true);
       var coupons = await RemoteServices.couponApply(
-          token: token, code: code??'', totalAmount: totalAmount);
+          token: token, code: code ?? '', totalAmount: totalAmount);
       if (coupons['success'] == true) {
         isCouponAvailable(true);
         total.value =
@@ -71,8 +71,7 @@ class CartController extends GetxController {
         couponMsg.value = coupons['message'];
         update();
       }
-    } finally {
-    }
+    } finally {}
   }
 
   removeCoupon() {

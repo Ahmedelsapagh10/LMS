@@ -26,9 +26,9 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Stack(
           children: [
             Image.asset(
-              'images/$splashLogo',
-              width: Get.width,
-              height: Get.height,
+              'images/logo_animy.gif',
+              width: Get.width / 2,
+              height: Get.height / 2,
               fit: BoxFit.cover,
             ),
             Positioned(

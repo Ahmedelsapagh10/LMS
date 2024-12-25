@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
-import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+// import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
@@ -35,7 +35,7 @@ class _InstaMojoPaymentState extends State<InstaMojoPayment> {
 
   String? checkoutUrl;
 
-  final flutterWebviewPlugin = new FlutterWebviewPlugin();
+  // final flutterWebviewPlugin = new FlutterWebviewPlugin();
 
   double progress = 0;
   String url = "";
@@ -57,7 +57,9 @@ class _InstaMojoPaymentState extends State<InstaMojoPayment> {
       ));
 
   Future createRequest() async {
-    final amount = (double.parse(widget.paymentData?['amount'].toString() ?? '') * 100).toInt();
+    final amount =
+        (double.parse(widget.paymentData?['amount'].toString() ?? '') * 100)
+            .toInt();
 
     String userFirstName = '${controller.firstName.value}';
     String userLastName = '${controller.lastName.value}';
@@ -187,8 +189,8 @@ class _InstaMojoPaymentState extends State<InstaMojoPayment> {
                       children: [
                         InAppWebView(
                           key: webViewKey,
-                          initialUrlRequest:
-                              URLRequest(url: WebUri.uri(Uri.parse(checkoutUrl ?? ''))),
+                          initialUrlRequest: URLRequest(
+                              url: WebUri.uri(Uri.parse(checkoutUrl ?? ''))),
                           initialOptions: options,
                           onWebViewCreated: (controller) {
                             webViewController = controller;
@@ -198,7 +200,8 @@ class _InstaMojoPaymentState extends State<InstaMojoPayment> {
                               this.url = url.toString();
                               checkoutUrl = this.url;
                             });
-                            if (checkoutUrl!.contains('$rootUrl/instamojo-payment/status')) {
+                            if (checkoutUrl!.contains(
+                                '$rootUrl/instamojo-payment/status')) {
                               Uri uri = Uri.parse(checkoutUrl ?? '');
                               String paymentRequestId =
                                   uri.queryParameters['payment_id'] ?? '';
@@ -261,9 +264,7 @@ class _InstaMojoPaymentState extends State<InstaMojoPayment> {
                               checkoutUrl = this.url;
                             });
                           },
-                          onConsoleMessage: (controller, consoleMessage) {
-
-                          },
+                          onConsoleMessage: (controller, consoleMessage) {},
                         ),
                       ],
                     ),

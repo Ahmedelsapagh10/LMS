@@ -23,8 +23,9 @@ class CartPage extends StatelessWidget {
   String tokenKey = "token";
 
   // FormGroup get form => fb.group(<String, dynamic>{'coupon': ['', Validators.required]});
-  FormGroup get form => fb.group({'coupon': ['', Validators.required]});
-
+  FormGroup get form => fb.group({
+        'coupon': ['', Validators.required]
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +127,8 @@ class CartPage extends StatelessWidget {
                                               //     OctoPlaceholder.blurHash(
                                               //   'LEHV6nWB2yk8pyo0adR*.7kCMdnj',
                                               // ),
-                                              placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                                              placeholderBuilder: OctoPlaceholder
+                                                  .circularProgressIndicator(),
 
                                               fit: BoxFit.cover,
                                               width: 88,
@@ -152,7 +154,13 @@ class CartPage extends StatelessWidget {
                                                               ?.title?[
                                                           '${stctrl.code.value}'] ??
                                                       "${cartController.cartList[index].course?.title?['en']}"),
-                                                  courseTPublisher(cartController.cartList[index].course?.user?.name ?? ''),
+                                                  courseTPublisher(
+                                                      cartController
+                                                              .cartList[index]
+                                                              .course
+                                                              ?.user
+                                                              ?.name ??
+                                                          ''),
                                                   SizedBox(
                                                     height: 5,
                                                   ),
@@ -343,7 +351,7 @@ class CartPage extends StatelessWidget {
                                                       ""
                                                   ? Container()
                                                   : couponError(cartController
-                                                          .couponMsg.value),
+                                                      .couponMsg.value),
                                               Divider(),
                                               Row(
                                                 mainAxisAlignment:
@@ -455,10 +463,17 @@ class CartPage extends StatelessWidget {
                                                             onPressed:
                                                                 form.valid
                                                                     ? () {
-                                                                  String? couponCode = form.value['coupon'] as String?;
-                                                                  cartController.applyCoupon(code: couponCode, totalAmount: cartController.total);
+                                                                        String?
+                                                                            couponCode =
+                                                                            form.value['coupon']
+                                                                                as String?;
+                                                                        cartController.applyCoupon(
+                                                                            code:
+                                                                                couponCode,
+                                                                            totalAmount:
+                                                                                cartController.total);
 
-                                                                  // cartController.applyCoupon(code: form.value['coupon'], totalAmount: cartController.total);
+                                                                        // cartController.applyCoupon(code: form.value['coupon'], totalAmount: cartController.total);
                                                                       }
                                                                     : null,
                                                             child: Text(
@@ -511,7 +526,8 @@ class CartPage extends StatelessWidget {
                     paymentController.getMyAddress();
                     paymentController.paymentAmount.value =
                         cartController.total.value.toString();
-                    paymentController.trackingId.value = cartController.cartList.first.tracking ??'';
+                    paymentController.trackingId.value =
+                        cartController.cartList.first.tracking ?? '';
                     Get.to(() => CheckoutPage());
                   },
                   child: Text(

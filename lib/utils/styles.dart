@@ -1,8 +1,7 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
-class AppStyles{
-
+class AppStyles {
   static final Color appColor = Colors.white;
 
   static final Color appThemeColor = Color(0xff8555F9);

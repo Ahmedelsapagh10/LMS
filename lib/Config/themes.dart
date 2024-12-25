@@ -11,8 +11,10 @@ class Themes {
     unselectedWidgetColor: Colors.black,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-        foregroundColor: MaterialStateProperty.all<Color>(AppStyles.appThemeColor),
-        backgroundColor: MaterialStateProperty.all<Color>(AppStyles.appThemeColor),
+        foregroundColor:
+            MaterialStateProperty.all<Color>(AppStyles.appThemeColor),
+        backgroundColor:
+            MaterialStateProperty.all<Color>(AppStyles.appThemeColor),
       ),
     ),
     tabBarTheme: TabBarTheme(
@@ -61,9 +63,7 @@ class Themes {
         color: Colors.black,
       ),
     ),
-    inputDecorationTheme: InputDecorationTheme(
-      border: InputBorder.none
-    ),
+    inputDecorationTheme: InputDecorationTheme(border: InputBorder.none),
     visualDensity: VisualDensity.adaptivePlatformDensity,
   );
   static final dark = ThemeData.dark().copyWith(
@@ -75,8 +75,10 @@ class Themes {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-        foregroundColor: MaterialStateProperty.all<Color>(AppStyles.appThemeColorDark),
-        backgroundColor: MaterialStateProperty.all<Color>(AppStyles.appThemeColorDark),
+        foregroundColor:
+            MaterialStateProperty.all<Color>(AppStyles.appThemeColorDark),
+        backgroundColor:
+            MaterialStateProperty.all<Color>(AppStyles.appThemeColorDark),
       ),
     ),
     shadowColor: Colors.transparent,
@@ -90,7 +92,6 @@ class Themes {
       color: Color(0xff8E99B7),
     ),
     textTheme: TextTheme(
-
       titleSmall: TextStyle(
         fontSize: 14.0,
         fontFamily: 'AvenirNext',
@@ -123,9 +124,7 @@ class Themes {
         fontFamily: 'AvenirNext',
       ),
     ),
-    inputDecorationTheme: InputDecorationTheme(
-        border: InputBorder.none
-    ),
+    inputDecorationTheme: InputDecorationTheme(border: InputBorder.none),
     visualDensity: VisualDensity.adaptivePlatformDensity,
   );
 }

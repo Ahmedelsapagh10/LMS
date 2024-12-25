@@ -11,6 +11,7 @@ import 'package:get_storage/get_storage.dart';
 // Project imports:
 import 'package:lms_flutter_app/Config/app_config.dart';
 import 'package:lms_flutter_app/Controller/edit_profile_controller.dart';
+import 'package:lms_flutter_app/utils/what_app.dart';
 import 'package:lms_flutter_app/utils/widgets/AppBarWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -258,8 +259,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   final _url = privacyPolicyLink;
                   // ignore: deprecated_member_use
                   await canLaunch(_url)
-                  // ignore: deprecated_member_use
-                      ? await launch(_url,forceWebView: true)
+                      // ignore: deprecated_member_use
+                      ? await launch(_url, forceWebView: true)
                       : throw 'Could not launch $_url';
                 },
                 leading: Icon(Icons.vpn_key_outlined),
@@ -268,11 +269,11 @@ class _SettingsPageState extends State<SettingsPage> {
               ListTile(
                 onTap: () async {
                   final _url =
-                  Platform.isIOS ? rateAppLinkiOS : rateAppLinkAndroid;
+                      Platform.isIOS ? rateAppLinkiOS : rateAppLinkAndroid;
                   // ignore: deprecated_member_use
                   await canLaunch(_url)
-                  // ignore: deprecated_member_use
-                      ? await launch(_url,forceWebView: true)
+                      // ignore: deprecated_member_use
+                      ? await launch(_url, forceWebView: true)
                       : throw 'Could not launch $_url';
                 },
                 leading: Icon(Icons.star),
@@ -280,16 +281,23 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               ListTile(
                 onTap: () async {
-                  final _url = contactUsLink;
-                  // ignore: deprecated_member_use
-                  await canLaunch(_url)
-                  // ignore: deprecated_member_use
-                      ? await launch(_url,forceWebView: true)
-                      : throw 'Could not launch $_url';
+                  await launchWhatsAppExternally('+218912375620');
                 },
-                leading: Icon(Icons.mail),
+                leading: Icon(Icons.contact_support_rounded),
                 title: Text("${stctrl.lang['Contact Us']}"),
               ),
+              // ListTile(
+              //   onTap: () async {
+              //     final _url = contactUsLink;
+              //     // ignore: deprecated_member_use
+              //     await canLaunch(_url)
+              //         // ignore: deprecated_member_use
+              //         ? await launch(_url, forceWebView: true)
+              //         : throw 'Could not launch $_url';
+              //   },
+              //   leading: Icon(Icons.mail),
+              //   title: Text("${stctrl.lang['Contact Us']}"),
+              // ),
               ListTile(
                 onTap: () async {
                   _deleteAccountDialog(context);

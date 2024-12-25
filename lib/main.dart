@@ -25,6 +25,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Bindings/dashboard_binding.dart';
 import 'Config/themes.dart';
 import 'Service/theme_service.dart';
+
 class MyHttpoverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
@@ -55,18 +56,16 @@ void main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(new MyApp());
-    WidgetsBinding.instance.addPostFrameCallback((timestamp) async{
-      if(Platform.isAndroid)
-        {
-          await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-        }
+    WidgetsBinding.instance.addPostFrameCallback((timestamp) async {
+      if (Platform.isAndroid) {
+        await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+      }
     });
   });
   fetchSetting().then((value) {
     appCurrency = value?.data?.currencySymbol ?? '';
   });
 }
-
 
 class MyApp extends StatefulWidget {
   @override
@@ -138,8 +137,9 @@ void setupNotification() {
       // Channel groups are only visual and are not required
       channelGroups: [
         NotificationChannelGroup(
-            channelGroupKey: 'basic_channel_group',
-            channelGroupName: 'Basic group',)
+          channelGroupKey: 'basic_channel_group',
+          channelGroupName: 'Basic group',
+        )
       ],
       debug: true);
 }
@@ -198,4 +198,3 @@ Future<Setting?> fetchSetting() async {
     return null;
   }
 }
-

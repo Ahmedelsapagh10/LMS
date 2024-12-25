@@ -36,6 +36,7 @@ import 'package:lms_flutter_app/utils/DefaultLoadingWidget.dart';
 import 'package:lms_flutter_app/utils/MediaUtils.dart';
 import 'package:lms_flutter_app/utils/SliverAppBarTitleWidget.dart';
 import 'package:lms_flutter_app/utils/styles.dart';
+import 'package:lms_flutter_app/utils/what_app.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:open_document/open_document.dart';
@@ -89,6 +90,7 @@ class _MyCourseDetailsViewState extends State<MyCourseDetailsView> {
 
   @override
   void initState() {
+    print('77777777777777777777 ${controller.myToken}');
     super.initState();
     initCheckPermission();
   }
@@ -115,6 +117,25 @@ class _MyCourseDetailsViewState extends State<MyCourseDetailsView> {
     percentageHeight = height / 100;
 
     return Scaffold(
+      floatingActionButton: (controller.myToken == null &&
+              controller.myCourseDetails.value.whatsappLink == null)
+          ? null
+          : FloatingActionButton(
+              backgroundColor: AppStyles.appThemeColor,
+              onPressed: () async {
+                try {
+                  await launchWhatsAppGroup(
+                      controller.myCourseDetails.value.whatsappLink ?? '');
+                } catch (e) {
+                  CustomSnackBar().snackBarError(e.toString());
+                }
+              },
+              tooltip: 'انضم للجروب الخاص بالكورس',
+              child: Icon(
+                FontAwesomeIcons.whatsapp,
+                color: Colors.white,
+              ),
+            ),
       body: LoaderOverlay(
         useDefaultLoading: false,
         overlayWidgetBuilder: (_) {
@@ -671,6 +692,8 @@ class _MyCourseDetailsViewState extends State<MyCourseDetailsView> {
 
                                     Get.bottomSheet(
                                       VimeoPlayerPage(
+                                        email:
+                                            controller.profileData.value.email,
                                         lesson: lessons?[index] ?? Lesson(),
                                         videoTitle: "${lessons?[index].name}",
                                         videoId:
@@ -685,6 +708,8 @@ class _MyCourseDetailsViewState extends State<MyCourseDetailsView> {
                                     Get.bottomSheet(
                                       VideoPlayerPage(
                                         "Youtube",
+                                        email:
+                                            controller.profileData.value.email,
                                         lesson: lessons?[index] ?? Lesson(),
                                         videoID: lessons?[index].videoUrl ?? '',
                                       ),
@@ -708,6 +733,8 @@ class _MyCourseDetailsViewState extends State<MyCourseDetailsView> {
                                       log("$rootUrl/scorm/video/${lessons?[index].id}");
                                       Get.bottomSheet(
                                         VimeoPlayerPage(
+                                          email: controller
+                                              .profileData.value.email,
                                           lesson: lessons?[index] ?? Lesson(),
                                           videoTitle:
                                               lessons?[index].name ?? '',
@@ -736,6 +763,8 @@ class _MyCourseDetailsViewState extends State<MyCourseDetailsView> {
                                         Get.bottomSheet(
                                           VdoCipherPage(
                                             embedInfo: embedInfo,
+                                            email: controller
+                                                .profileData.value.email,
                                             lesson: lessons?[index] ?? Lesson(),
                                           ),
                                           backgroundColor: Colors.black,
@@ -1037,19 +1066,20 @@ class _MyCourseDetailsViewState extends State<MyCourseDetailsView> {
                                 fit: BoxFit.cover,
                                 height: 40,
                                 width: 40,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset('images/logox.png');
+                                },
                                 image: controller.myCourseDetails.value
                                             .comments![index].user!.image
                                             ?.contains('public/') ??
                                         false
                                     ? NetworkImage(
                                         '$rootUrl/${controller.myCourseDetails.value.comments?[index].user?.image}')
-                                    : NetworkImage(controller
-                                            .myCourseDetails
-                                            .value
-                                            .comments?[index]
-                                            .user
-                                            ?.image ??
-                                        ''),
+                                    : NetworkImage(
+                                        controller.myCourseDetails.value
+                                                .comments?[index].user?.image ??
+                                            '',
+                                      ),
                                 // placeholderBuilder: OctoPlaceholder.blurHash(
                                 //   'LEHV6nWB2yk8pyo0adR*.7kCMdnj',
                                 // ),
@@ -1140,6 +1170,9 @@ class _MyCourseDetailsViewState extends State<MyCourseDetailsView> {
                     fit: BoxFit.cover,
                     height: 40,
                     width: 40,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset('images/logox.png');
+                    },
                     image: controller.dashboardController.profileData.image
                                 ?.contains('public') ??
                             false

@@ -23,6 +23,7 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Views/Account/device_id_page.dart';
+import '../utils/CustomSnackBar.dart';
 
 class DashboardController extends GetxController {
   final CartController cartController = Get.find<CartController>();
@@ -332,6 +333,28 @@ class DashboardController extends GetxController {
       profileData = products ?? User();
       return products;
     } finally {}
+  }
+
+  TextEditingController walletCode = TextEditingController();
+  addCodeToWallet(BuildContext context) async {
+    String? token = userToken.read(tokenKey) ?? '';
+    try {
+      isLoading(true);
+      var response = await RemoteServices.addCodeToWallet(
+          token: token, code: walletCode.text.toString());
+
+      print('888888888 ${response.toString()}');
+      if (response['status'] == 200) {
+        CustomSnackBar().snackBarSuccess(response['message']);
+        Navigator.pop(context);
+        walletCode.clear();
+      } else {
+        CustomSnackBar().snackBarError(response['message']);
+      }
+      getProfileData();
+    } finally {
+      isLoading(false);
+    }
   }
 
   String _firebaseAppToken = '';

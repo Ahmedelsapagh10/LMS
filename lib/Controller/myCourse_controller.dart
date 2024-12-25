@@ -26,7 +26,7 @@ class MyCourseController extends GetxController {
   final HomeController homeController = Get.put(HomeController());
 
   var myCourses = <CourseMain>[].obs;
-
+  var myToken;
   var isLoading = false.obs;
 
   var isMyCourseLoading = false.obs;
@@ -55,13 +55,13 @@ class MyCourseController extends GetxController {
   @override
   void onInit() {
     getProfileData();
-
     fetchMyCourse();
     super.onInit();
   }
 
   Future<List<CourseMain>?> fetchMyCourse() async {
     String token = await accountController.userToken.read(tokenKey);
+    myToken = token;
 
     try {
       isLoading(true);
@@ -81,6 +81,8 @@ class MyCourseController extends GetxController {
 
   Future<User?> getProfileData() async {
     String token = await userToken.read(tokenKey);
+    myToken = token;
+
     try {
       var products = await RemoteServices.getProfile(token);
       profileData.value = products ?? User();
@@ -110,6 +112,8 @@ class MyCourseController extends GetxController {
     try {
       Uri topCatUrl =
           Uri.parse(baseUrl + '/get-course-details/' + courseId.toString());
+      print('url is : ${topCatUrl}');
+
       var response = await http.get(topCatUrl);
       if (response.statusCode == 200) {
         var jsonString = jsonDecode(response.body);

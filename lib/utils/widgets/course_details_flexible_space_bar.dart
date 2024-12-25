@@ -8,6 +8,7 @@ import 'package:octo_image/octo_image.dart';
 import 'package:vdocipher_flutter/vdocipher_flutter.dart';
 
 import '../../Config/app_config.dart';
+import '../../Controller/myCourse_controller.dart';
 import '../../Model/Course/CourseMain.dart';
 import '../../Views/VideoView/VideoChipherPage.dart';
 import '../../Views/VideoView/VideoPlayerPage.dart';
@@ -17,9 +18,18 @@ import '../CustomText.dart';
 import 'StarCounterWidget.dart';
 
 // ignore: must_be_immutable
-class CourseDetailsFlexilbleSpaceBar extends StatelessWidget {
+class CourseDetailsFlexilbleSpaceBar extends StatefulWidget {
   final CourseMain course;
   CourseDetailsFlexilbleSpaceBar(this.course);
+
+  @override
+  State<CourseDetailsFlexilbleSpaceBar> createState() =>
+      _CourseDetailsFlexilbleSpaceBarState();
+}
+
+class _CourseDetailsFlexilbleSpaceBarState
+    extends State<CourseDetailsFlexilbleSpaceBar> {
+  final MyCourseController controller = Get.put(MyCourseController());
 
   double width = 0;
 
@@ -41,7 +51,7 @@ class CourseDetailsFlexilbleSpaceBar extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           OctoImage(
-            image: NetworkImage('$rootUrl/${course.image}'),
+            image: NetworkImage('$rootUrl/${widget.course.image}'),
             placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
             fit: BoxFit.cover,
             errorBuilder: (BuildContext context, Object exception,
@@ -78,8 +88,8 @@ class CourseDetailsFlexilbleSpaceBar extends StatelessWidget {
                   height: 30,
                 ),
                 courseDescriptionTitle(
-                    course.title?['${stctrl.code.value}'] ?? ""),
-                courseDescriptionPublisher(course.user?.name ?? ''),
+                    widget.course.title?['${stctrl.code.value}'] ?? ""),
+                courseDescriptionPublisher(widget.course.user?.name ?? ''),
                 Row(
                   children: [
                     Expanded(
@@ -87,7 +97,9 @@ class CourseDetailsFlexilbleSpaceBar extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           StarCounterWidget(
-                            value: double.tryParse(course.review.toString()) ?? 0,
+                            value: double.tryParse(
+                                    widget.course.review.toString()) ??
+                                0,
                             color: Color(0xffFFCF23),
                             size: 10,
                           ),
@@ -95,17 +107,18 @@ class CourseDetailsFlexilbleSpaceBar extends StatelessWidget {
                             height: percentageHeight * 1,
                           ),
                           courseDescriptionPublisher('(' +
-                              course.review.toString() +
+                              widget.course.review.toString() +
                               ') ' +
                               "${stctrl.lang["based on"]}" +
                               ' ' +
-                              '${course.reviews?.length.toString()}' +
+                              '${widget.course.reviews?.length.toString()}' +
                               ' ' +
                               "${stctrl.lang["review"]}"),
                         ],
                       ),
                     ),
-                    course.trailerLink != null && course.host != "ImagePreview"
+                    widget.course.trailerLink != null &&
+                            widget.course.host != "ImagePreview"
                         ? GestureDetector(
                             child: CircleAvatar(
                                 radius: 20.0,
@@ -119,29 +132,40 @@ class CourseDetailsFlexilbleSpaceBar extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(20.0),
                                 )),
                             onTap: () async {
-                              if (course.host == "Vimeo") {
-                                var vimeoID = course.trailerLink
+                              //! done 3
+
+                              if (widget.course.host == "Vimeo") {
+                                var vimeoID = widget.course.trailerLink
                                     ?.replaceAll("/videos/", "");
 
                                 Get.bottomSheet(
                                   VimeoPlayerPage(
-                                    videoTitle: "${course.title}",
+                                    email: controller.profileData.value.email,
+                                    videoTitle: "${widget.course.title}",
                                     videoId: '$rootUrl/vimeo/video/$vimeoID',
                                   ),
                                   backgroundColor: Colors.black,
                                   isScrollControlled: true,
                                 );
-                              } else if (course.host == "Youtube") {
+                              }
+                              //! done 1
+
+                              else if (widget.course.host == "Youtube") {
                                 Get.bottomSheet(
                                   VideoPlayerPage(
                                     "Youtube",
-                                    videoID: course.trailerLink,
+                                    videoID: widget.course.trailerLink,
+                                    email: controller.profileData.value.email,
                                   ),
                                   backgroundColor: Colors.black,
                                   isScrollControlled: true,
                                 );
-                              } else if (course.host == "VdoCipher") {
-                                await generateVdoCipherOtp(course.trailerLink)
+                              }
+
+                              //! done 4
+                              else if (widget.course.host == "VdoCipher") {
+                                await generateVdoCipherOtp(
+                                        widget.course.trailerLink)
                                     .then((value) {
                                   if (value['otp'] != null) {
                                     final EmbedInfo embedInfo =
@@ -155,6 +179,8 @@ class CourseDetailsFlexilbleSpaceBar extends StatelessWidget {
 
                                     Get.bottomSheet(
                                       VdoCipherPage(
+                                        email:
+                                            controller.profileData.value.email,
                                         embedInfo: embedInfo,
                                       ),
                                       backgroundColor: Colors.black,
@@ -167,15 +193,20 @@ class CourseDetailsFlexilbleSpaceBar extends StatelessWidget {
                                         .snackBarWarning(value['message']);
                                   }
                                 });
-                              } else {
+                              }
+                              //! done 2
+                              else {
                                 var videoUrl;
-                                if (course.host == "Self") {
-                                  videoUrl = rootUrl + "/" + course.trailerLink.toString();
+                                if (widget.course.host == "Self") {
+                                  videoUrl = rootUrl +
+                                      "/" +
+                                      widget.course.trailerLink.toString();
                                 }
                                 Get.bottomSheet(
                                   VideoPlayerPage(
                                     "network",
                                     videoID: videoUrl,
+                                    email: controller.profileData.value.email,
                                   ),
                                   backgroundColor: Colors.black,
                                   isScrollControlled: true,
@@ -211,11 +242,11 @@ class CourseDetailsFlexilbleSpaceBar extends StatelessWidget {
                           SizedBox(
                             width: 1,
                           ),
-                          course.duration != null
-                              ? courseStructure(
-                                  getTimeString(int.parse(course.duration.toString()))
-                                          .toString() +
-                                      " ${stctrl.lang["Hour(s)"]}")
+                          widget.course.duration != null
+                              ? courseStructure(getTimeString(int.parse(
+                                          widget.course.duration.toString()))
+                                      .toString() +
+                                  " ${stctrl.lang["Hour(s)"]}")
                               : SizedBox.shrink(),
                         ],
                       ),
@@ -242,7 +273,7 @@ class CourseDetailsFlexilbleSpaceBar extends StatelessWidget {
                             width: 5,
                           ),
                           courseStructure(
-                              '${course.courseLevel?.title?[stctrl.code.value] ?? course.courseLevel?.title?['en']}'),
+                              '${widget.course.courseLevel?.title?[stctrl.code.value] ?? widget.course.courseLevel?.title?['en']}'),
                         ],
                       ),
                     ),
@@ -267,7 +298,8 @@ class CourseDetailsFlexilbleSpaceBar extends StatelessWidget {
                           SizedBox(
                             width: 5,
                           ),
-                          courseStructure(course.totalEnrolled.toString()),
+                          courseStructure(
+                              widget.course.totalEnrolled.toString()),
                         ],
                       ),
                     ),

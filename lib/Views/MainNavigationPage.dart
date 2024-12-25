@@ -27,6 +27,8 @@ import 'package:octo_image/octo_image.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
+import '../Controller/edit_profile_controller.dart';
+import '../utils/CustomSnackBar.dart';
 import 'Downloads/DownloadsFolder.dart';
 
 class MainNavigationPage extends StatefulWidget {
@@ -225,8 +227,10 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
 }
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({Key? key}) : super(key: key);
+  CustomDrawer({Key? key}) : super(key: key);
+  final DashboardController profileController = Get.put(DashboardController());
 
+  ///!
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -275,9 +279,8 @@ class CustomDrawer extends StatelessWidget {
                               // placeholderBuilder: OctoPlaceholder.blurHash(
                               //   'LEHV6nWB2yk8pyo0adR*.7kCMdnj',
                               // ),
-                              placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
-
-
+                              placeholderBuilder:
+                                  OctoPlaceholder.circularProgressIndicator(),
                             ),
                           ),
                         );
@@ -304,8 +307,8 @@ class CustomDrawer extends StatelessWidget {
                                         height: 40,
                                         width: 40,
                                         image: stctrl.dashboardController
-                                                .profileData.image
-                                                !.contains('public/')
+                                                .profileData.image!
+                                                .contains('public/')
                                             ? NetworkImage(
                                                 "$rootUrl/${stctrl.dashboardController.profileData.image}")
                                             : NetworkImage(
@@ -314,9 +317,9 @@ class CustomDrawer extends StatelessWidget {
                                         //     OctoPlaceholder.blurHash(
                                         //   'LEHV6nWB2yk8pyo0adR*.7kCMdnj',
                                         // ),
-                                  placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
-
-                                )
+                                        placeholderBuilder: OctoPlaceholder
+                                            .circularProgressIndicator(),
+                                      )
                                     : Container(),
                           ),
                         );
@@ -341,10 +344,10 @@ class CustomDrawer extends StatelessWidget {
                                   ? SizedBox.shrink()
                                   : Text(
                                       appCurrency +
-                                              ' ' +
-                                              stctrl.dashboardController
-                                                  .profileData.balance
-                                                  .toString(),
+                                          ' ' +
+                                          stctrl.dashboardController.profileData
+                                              .balance
+                                              .toString(),
                                       style: TextStyle(
                                           fontSize: 13,
                                           color: Color(0xff8E99B7)),
@@ -538,6 +541,112 @@ class CustomDrawer extends StatelessWidget {
                       ],
                     ),
                   ),
+                ), //! enter code
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Container(
+                            width: double.infinity,
+                            child: Text(
+                              stctrl.lang['Enter Your Code'] ?? 'Enter Code',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          content: SizedBox(
+                            width: double.infinity,
+                            child: TextField(
+                              controller: profileController.walletCode,
+                              decoration: InputDecoration(
+                                  hintText: stctrl.lang['Enter Your Code'] ??
+                                      'Enter Code',
+                                  border: OutlineInputBorder(),
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 3)),
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                profileController.walletCode.clear();
+
+                                Navigator.pop(context);
+                              },
+                              child: Text(stctrl.lang['Cancel']),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                if (profileController.walletCode.text.isEmpty) {
+                                  CustomSnackBar().snackBarError(
+                                      stctrl.lang['Enter Your Code'] ??
+                                          'Enter Your Code');
+                                } else {
+                                  profileController.addCodeToWallet(context);
+                                }
+                                // addCodeToWallet(_textController.text);
+                              },
+                              child: Text(
+                                stctrl.lang['Send'],
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                    //!show dialog and on clieck yes call     addCodeToWallet
+                  },
+                  child: Container(
+                    padding: EdgeInsets.only(left: 20, top: 12.5, bottom: 10),
+                    margin:
+                        EdgeInsets.only(left: 20, right: 30, top: 5, bottom: 5),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Get.theme.cardColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Get.theme.shadowColor,
+                          blurRadius: 10.0,
+                          offset: Offset(2, 3),
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 6,
+                        ),
+                        Icon(
+                          Icons.wallet_sharp,
+                          color: Get.theme.primaryColor,
+                          size: 18,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          "${stctrl.lang["Enter Your Code"] ?? 'Enter Your Code'}",
+                          style: Get.textTheme.titleSmall,
+                        ),
+                        Expanded(child: Container()),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          size: 16,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 GestureDetector(
                   child: drawerListItem(
@@ -595,8 +704,8 @@ class CustomDrawer extends StatelessWidget {
                           // placeholderBuilder: OctoPlaceholder.blurHash(
                           //   'LEHV6nWB2yk8pyo0adR*.7kCMdnj',
                           // ),
-                          placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
-
+                          placeholderBuilder:
+                              OctoPlaceholder.circularProgressIndicator(),
                         ),
                       ),
                     ),

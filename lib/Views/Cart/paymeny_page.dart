@@ -116,7 +116,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       });
     }).catchError((err) {
       print('error : ' + err.toString());
-    } );
+    });
   }
 
   Future openCheckout() async {
@@ -158,7 +158,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         });
       }).catchError((err) {
         print('error : ' + err.toString());
-      } );
+      });
     } else {
       finalAmount = double.parse(controller.paymentAmount.value.toString());
     }
@@ -291,7 +291,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             width: 0.2,
                             color: controller.paymentList[position] ==
                                     controller.paymentList[radioSelector]
-                                ? Get.textTheme.titleMedium?.color ?? Color(0xFFFFFFFF)
+                                ? Get.textTheme.titleMedium?.color ??
+                                    Color(0xFFFFFFFF)
                                 : Get.theme.canvasColor,
                           ),
                         ),
@@ -305,7 +306,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             setState(() {
                               radioSelector = position;
                               controller.paymentList[radioSelector] = value;
-                              controller.selectedGateway.value = value?.method ?? '';
+                              controller.selectedGateway.value =
+                                  value?.method ?? '';
 
                               selectedMethod = controller.selectedGateway.value;
                             });
@@ -323,11 +325,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   // placeholderBuilder: OctoPlaceholder.blurHash(
                                   //   'LEHV6nWB2yk8pyo0adR*.7kCMdnj',
                                   // ),
-                                  placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
+                                  placeholderBuilder: OctoPlaceholder
+                                      .circularProgressIndicator(),
 
                                   fit: BoxFit.fitWidth,
                                   errorBuilder: (BuildContext context,
-                                      Object exception, StackTrace? stackTrace) {
+                                      Object exception,
+                                      StackTrace? stackTrace) {
                                     return Image.asset('images/fcimg.png');
                                   },
                                 ),
@@ -380,8 +384,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 Get.to(() => MidTransPaymentPage(
                       paymentData: resp,
                     ));
-              }
-              else if (controller.selectedGateway.value == "PayPal") {
+              } else if (controller.selectedGateway.value == "PayPal") {
                 Get.snackbar(
                   "${stctrl.lang["Processing Paypal Payment"]}",
                   "${stctrl.lang["Please wait"]}" + '...',
@@ -408,9 +411,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     },
                   ),
                 );
-              }
-
-              else if (controller.selectedGateway.value == "Sslcommerz") {
+              } else if (controller.selectedGateway.value == "Sslcommerz") {
                 Get.snackbar(
                   "Processing SSL Payment",
                   // "${stctrl.lang["Processing Paypal Payment"]}",
@@ -432,14 +433,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 var result = await Get.to(SslCommerz(
                   trackingId: controller.tracking.value,
                 ));
-                if(result!=null){
+                if (result != null) {
                   controller.getCadList(result);
-                } else {
-
-                }
-              }
-
-              else if (controller.selectedGateway.value == "PayTM") {
+                } else {}
+              } else if (controller.selectedGateway.value == "PayTM") {
                 Get.snackbar(
                   "${stctrl.lang["Processing PayTM Payment"]}",
                   "${stctrl.lang["Please wait"]}" + '...',
