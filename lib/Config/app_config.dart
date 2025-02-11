@@ -36,7 +36,7 @@ Map<String, String> header({String? token}) {
 final String baseUrl = rootUrl + "/api";
 
 //** Change App Title
-final String companyName = "Impulse Academy";
+final String companyName = "Excidia Academy";
 
 //** Change Currency
 String appCurrency = '\$';

@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 /// [phoneNumber] must include the country code (e.g., "1234567890").
 Future<void> launchWhatsAppExternally(String phoneNumber) async {
   // Define the message
-  const String initialMessage = "مرحباً بك ف دعم Impulse Academy !";
+  const String initialMessage = "مرحباً بك ف دعم Excidia Academy !";
 
   // URL-encode the message
   final String encodedMessage = Uri.encodeComponent(initialMessage);

@@ -2,9 +2,9 @@
         xmlns:tools="http://schemas.android.com/tools"
         package="com.infix.lms">
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
+    <!-- <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/> -->
     <application
-            android:label="Impulse"
+            android:label="Excidia Academy"
             tools:replace="android:label"
             android:icon="@mipmap/launcher_icon"
             android:usesCleartextTraffic="true">
